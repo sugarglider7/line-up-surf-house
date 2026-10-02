@@ -223,3 +223,88 @@ Auditor: AuditFactsLineUp · 2026-10-02 · scope: all 13 HTML files in `site/` (
 - **A21 · P3** · All /fr/ pages: footer and JSON-LD · The footer address reads "80090 Agadir, **Morocco**" on French pages. The FR JSON-LD `amenityFeature` names are English ("Breakfast included"…, build.py:479). · Fix: "Maroc" in the FR footer, and pass FR amenity names ("Petit-déjeuner inclus", "Wi-Fi gratuit", "Parking public gratuit", "Terrasse", "École de surf et location de planches") for the FR build.
 
 **Counts:** P0 0 · P1 2 · P2 5 · P3 14.
+
+
+## Audit B — visual, mobile, conversion, links, performance, live
+
+Auditor: AuditVisualLineUp · 2026-10-02 · live https://line-up-surf-house.peashoot.io/. Live HTML is byte-identical to `site/` at 11cd9f5 (md5 of all 12 pages). One browser tab; it was closed at the end. Every form submit ran with `window.open` stubbed, so no wa.me tabs were opened. Viewports: 360×740, 390×844, 430×932 (all 12 pages), plus 1440×900, 1920×1080 and 2560×1440 (EN templates, `/fr/` and `/fr/la-maison/`), plus a 1366–2560 sweep of the home cover. Screenshots are in `/home/agent/agadir-pilot/qa/line-up-surf-house/p4/`: `390-*` and `1440-*` are full pages, `fold-<w>-*` are first screens, `form-*` are form states.
+
+**Checked, no finding:**
+- **Links:** all 12 sitemap URLs return 200. Every internal href, src and srcset on every page returns 200. `/rooms` and `/fr` 308 to the slash URL, `/index.html` 308 to `/`, and http 301s to https. A missing path serves the custom 404 page with HTTP 404 and EN + FR text. It links to `/`, `/fr/` and WhatsApp. External links: wa.me 302 (normal), Booking.com 202 (bot gate, the URL is correct), Google Maps place_id 200. The language switch lands on the counterpart page on all 12 pages, in both directions.
+- **Mobile:** `scrollWidth` equals the viewport at 360, 390, 430, 1440, 1920 and 2560 on every page tested, so there is no horizontal overflow. The menu sheet works: `aria-expanded` stays in sync on both Menu buttons, Esc closes it and returns focus to the burger, tapping a link closes it, focus stays inside the sheet after 15 Tabs, and body scroll is locked. The bottom dock hides while the ask band, the submit button or the footer is on screen, checked at 360 on home, /rooms/ and /book/. Inputs are 17 px (no iOS zoom). Field types are correct: `date`, `select`, `text` and `textarea`.
+- **Conversion:** I filled every field on `/book/` (EN), `/fr/reserver/` (FR), `/` and `/fr/`, including all four extras, accents (Zoë Müller, Élodie Lefèvre), `&`, `%`, an em dash and a line break. The decoded wa.me text matches BRAND_NOTES §8 line for line. Dates are en-GB / fr-FR. Nights and plurals are right ("1 nuit", "1 adulte, 2 enfants (plus de 5 ans)"). Empty optional fields are left out. There is no undefined or NaN anywhere. Validation shows the summary bar, inline messages and `aria-invalid`, and focus moves to the first bad field. Cases tested: empty, past check-in ("Check-in can’t be in the past."), check-out before check-in, and check-out equal to check-in ("Check-out needs to be after check-in."). Today is accepted as a check-in date. The success panel has "Didn’t open? Tap here" (same URL), `tel:+212641236758` and Booking.com. "Change something" restores the form with the values kept. Deep links `?room=seaview|triple|private|compact` and `?extra=lessons|rental|taxi` prefill correctly in EN and FR. An unknown `?room=xyz` is ignored safely. With JS off, every section is still visible.
+- **Live:** 0 console errors, 0 page errors and 0 failed requests on all 12 pages plus the 404, with each page scrolled to the end. Every page has exactly one h1.
+- **Performance** (390×844 @2x, cache disabled, brotli transfer sizes, LCP measured with PerformanceObserver):
+
+| page | before scroll | after full scroll | LCP element | CLS |
+|---|---|---|---|---|
+| `/` | 223 KB · 10 req | 461 KB · 18 req | `hero-m-900.webp` 49 KB, 572 ms | 0 |
+| `/rooms/` | 199 KB · 11 req | 306 KB · 17 req | `view-window-1000.webp` 42 KB | 0 |
+| `/surf/` | 225 KB · 9 req | 395 KB · 13 req | `shop-inside-1000.webp` 104 KB | 0 |
+| `/house/` | 217 KB · 9 req | 217 KB · 9 req | `mural-1000.webp` 95 KB | 0 |
+| `/anza/` | 155 KB · 9 req | 155 KB · 9 req | `anza-view-800.webp` 34 KB | 0 |
+| `/book/` | 121 KB · 8 req | 121 KB · 8 req | `p.mast__lead` (text) | 0 |
+| `/fr/` | 223 KB · 10 req | 444 KB · 17 req | `hero-m-900.webp` 49 KB | 0 |
+
+  - All 3 fonts load on every page (104 KB; 2 are preloaded).
+  - The LCP image is the only eager image and has `fetchpriority="high"`. Everything else is lazy.
+  - No image is more than 2× its rendered width.
+  - Headers seen with `curl -I`: `/assets/*` is `public, max-age=31536000, immutable`, and CSS/JS URLs are versioned (`?v=hash`). HTML is `max-age=0, must-revalidate`. CSS, JS and HTML are served brotli. The CSP and security headers are present.
+
+### P0
+- **B1 · P0** · `/` and `/fr/` cover · ≥1600 px wide (the most common desktop is 1920×1080) · The hero side column collapses as the window gets wider. Measured `.cover__lead` width: 355 px at 1440, 291 at 1536, 248 at 1600, 194 at 1680, 141 at 1760, and 83 px at 1920 and 2560. At 1920 the lead runs one word per line ("Eight / private / rooms / a / few…"). It climbs to `top:-141px`, under the header, over the "FR" link and the header "Ask for dates" button. "9.6 on Booking.com · Book there" breaks over 5 lines. The H1 also narrows: 515 px at 1920, 234 px at 2560, 4 lines. Screenshots: `fold-1920-home.jpg`, `fold-2560-home.jpg` (1440 is fine: `fold-1440-home.jpg`). · The owner, or Fadwa on a laptop, opening the link on a desktop sees a broken first screen. Every other template is fine at 1920 and 2560. · **Cause:** `site.css:160`, `.cover__band-in{padding-left:calc(var(--gut) + 57%);padding-right:calc(var(--gut) + 10%)}`. The `.cover__title{padding-right:44%}` at `site.css:167` has the same problem. Percentage padding resolves against the full-width `.cover__band`, not the 1400 px wrap, so above 1400 the padding eats the box. **Fix:** clamp the percentages to the wrap: `padding-left:calc(var(--gut) + min(57%, 798px)); padding-right:calc(var(--gut) + min(10%, 140px))` and `.cover__title{padding-right:min(44%, 616px)}`. Or use a 2-column grid inside the wrap. Then re-check 1366, 1440, 1536, 1920 and 2560 in EN and FR.
+
+### P2
+- **B2 · P2** · `/house/`, `/anza/` (+ FR) · all viewports · These pages are thin on photography compared with home, rooms and surf. `/house/` is 8,595 px tall at 390 and has **one** image, the mural in the masthead. Breakfast, the two brothers, home cooking, "ask us about", the roof, guest scores and house rules are all text and panels. `/anza/` has **one** image, a near-duplicate of the home hero view (see B3). Dinosaur footprints, cafés and fried fish, buses and day trips are text only. `/book/` has none, which is fine for a form page. The day strip and the chapter markers keep the rhythm, but at mobile these two pages scroll as long runs of type. Next to home they feel unfinished. Screenshots: `390-house.jpg`, `390-anza.jpg`, `1440-house.jpg`, `1440-anza.jpg`. · **Fix (real assets only):**
+  - `/house/` "Two brothers. One family. One house.": use the front of the house with the shop banner (`gm-owner-03`; `shopfront-*` is already built, home only).
+  - `/house/` breakfast/rooms: use the LINE UP towels on the triple (bk-29, `room-triple-3-*` is already built).
+  - `/house/` "Ask us about": use the `reef-plaque` or the lounge corner (bk-33, check its ASSET_INVENTORY status first).
+  - `/anza/` "A local surf town": use the street toward the beach with the soft-tops (gm-owner-01, `boards-*` is built) instead of a second upstairs view.
+  - Keep "ask the owner for roof, breakfast and family photos" at the top of the Fadwa list.
+- **B3 · P2** · `/`, `/rooms/`, `/surf/`, `/anza/` · all viewports · The same scene, the car park and Anza beach from an upstairs window, is used 5 times:
+  - the home hero (bk-03)
+  - home ch01 `window-*` (bk-47)
+  - the **same file** `window-*` again in `/surf/` "Check it from the window."
+  - the `/rooms/` masthead `view-window-*` (bk-32: black window frame, the neighbour's white wall, sky)
+  - the `/anza/` band `anza-view-*` (bk-45: same pole, same cars; its caption "Anza beach from upstairs at Line Up" is word for word the hero's)
+
+  A visitor going home → rooms → surf → anza sees the same view at the top of three of the four pages. On `/rooms/`, the page titled "Eight private rooms." opens on a window and the neighbour's wall, not a room (`fold-390-rooms.jpg`, `fold-1440-rooms.jpg`). · **Fix:**
+  - `/rooms/` masthead → `room-triple` (bk-46, "bed by a big open window, sea view, LINE UP towel"): a room *and* the view.
+  - `/anza/` → keep the hairline band but give it a different caption ("The line-up, from the house") and lose the second view elsewhere on the page. Or swap in the gm-owner-01 street shot from B2 and move the hairline concept to the cross-section.
+  - Keep `window-*` on home ch01 only. Give `/surf/` "Check it from the window" `view-window` (freed from `/rooms/`) so no file appears twice.
+- **B4 · P2** · `/` ch05 "Sunset from the roof." (+ `/fr/`) · all viewports · The day peaks on the weakest photo. `late-light-*` (bk-17, slate/haze toned) reads as a grey overcast afternoon. Next to it is the typographic roof panel, ink on ink. The chapter promised as the payoff ("the sun goes down over the Atlantic") ends grey on dark, and the yellow ask band follows straight away. Screenshot: `390-home-sunset.jpg`, `1440-home.jpg` (bottom). While the image lazy-loads, its `#9f9d96` placeholder shows as a flat grey box (seen on a fast scroll). · **Fix:**
+  - Drop the photo from ch05 and let the roof panel take the full width, with the sun setting on the haze line (it already animates). Or give the photo a warm haze→board duotone so the sun disc reads.
+  - Or move `late-light` into `/house/` "The roof, at the end of the day.", which has no image (helps B2).
+  - Replace it with a real rooftop sunset photo once the owner sends one.
+- **B5 · P2** · `/` cover · ≥960 px · The concept's signature move ("the headline stands on the horizon line, like surfers in the line-up") works on mobile but not on desktop.
+  - At 1440 the baseline of "the break." sits ≈55 px above the `cover__hz` hairline at y=581. The `.cover__title` bottom is `calc(100% - var(--hzpos) + clamp(18px,3cqw,40px))`, and the 40 px plus line-height leaves the type floating.
+  - At desktop size, the electricity pole and three wires cut through "beside the break." The `hero-d-1396` source is visibly soft at 1440 and beyond.
+
+  Screenshot: `fold-1440-home.jpg`. · **Fix:**
+  - Set the title's bottom offset to the font's descender, ≈ `0.06em`, instead of `clamp(18px,3cqw,40px)` at ≥960, so the baseline lands on the line as it does at 390.
+  - Strengthen the title's text-shadow behind the wires a little.
+  - Ask the owner for the original full-size photo of the upstairs view.
+
+### P3
+- **B6 · P3** · `/book/`, `/fr/reserver/`, home ask band · 360 px · The date fields are 152 px wide, so the browser's "mm/dd/yyyy" placeholder (or "jj/mm/aaaa" on FR Android) is clipped to "mm/dd/yyy" next to the calendar icon (`fold-360-book.jpg`, `360-fr-reserver-form.jpg`). · **Fix:** below 380 px, stack check-in and check-out full width, or reduce the date input's horizontal padding to 10 px.
+- **B7 · P3** · footer on all pages, plus the header wordmark · 390 · Tap targets are under 44 px: footer "Open in Google Maps", "WhatsApp +212…", "Call +212…", "Booking.com", and the "Around the site" links Rooms / Surf school / The house / Anza / Ask for dates are all 36 px tall. The wordmark link is 134×36. The "FR" language link is 31 px wide. · These are phone numbers and the main CTA, tapped with a thumb. · **Fix:** `footer a{display:inline-flex;align-items:center;min-height:44px}`, and give the language link `min-width:44px`.
+- **B8 · P3** · Headline widows: one short word left alone on the last line. Measured on live text:
+  - "Eight rooms. No / dorms." on `/` ch03 (390 + 1440)
+  - "Lunch at home, if you / ask" on `/` (1440)
+  - "Le petit-déjeuner, fait / maison" on `/fr/` (390)
+  - "Anza, autour de la / maison" on `/fr/` (1440)
+  - "Le règlement, en / bref." on `/fr/la-maison/` (390 + 1440)
+  - "Des noms sur les / portes" on `/fr/chambres/` (1440)
+  - "05 Ask for / dates" in the menu sheet (`390-menu-open.jpg`)
+  - "DIDN’T OPEN? TAP / HERE" on the success button (`form-en-success.jpg`)
+  - The FR book kicker "COUCHER DE SOLEIL / · PRÉPARER LA SUITE" starts its second line with the "·" at 360 (`fold-360-fr_reserver.jpg`).
+
+  The stacked 3-line H1s ("Eight / private / rooms.") are intentional and fine. · **Fix:** `text-wrap:balance` on h2/h3 and `.sheet a`. Put a NBSP before the last word in these strings (build.py could do this for every h2/h3). Make the success label "Didn’t open? Tap here" a non-wrapping 2-word label, e.g. "Open WhatsApp again" (FR wording per A19).
+- **B9 · P3** · `/book/?room=…` and `/fr/reserver/?room=…` · The language switch drops the query string, so a guest who came from "Ask for this room" and switches language loses the prefilled room and extras. · **Fix:** in `site.js`, on the book page, append `location.search` to the `a[hreflang]` href. Room and extra values are the same keys in both languages.
+- **B10 · P3** · `/surf/` rental, `/house/` home cooking and airport taxi · Only `/surf/` "Want a lesson?" (`?extra=lessons`) and the room links use the prefill. The JS already supports `?extra=rental`, `taxi` and `meals`, but nothing links to them. · **Fix:** add the ask link `/book/?extra=rental` under "Boards and wetsuits at the door." Add `/book/?extra=meals` under "Tajine, if you ask ahead." Add `/book/?extra=taxi` on the airport row of "Ask us about" and on `/anza/` "Getting around". Do the same with the FR URLs.
+- **B11 · P3** · forms · Edge case: typing a past check-in (e.g. 20 Sep 2026) sets `checkout.min` and `checkout.value` to 21 Sep 2026. If the guest then fixes check-in by typing, check-out keeps the old value until the next change event, and `min` stays in the past. Submit validation still catches it, so this is cosmetic. · **Fix:** in the check-in change handler, use `max(today, a)` as the base for `fout.min`.
+- **B12 · P3** · forms with JS off · The form has no `action` or `method`, so "Continue in WhatsApp" reloads the page with the fields in the query string and gives no feedback. · **Fix:** add `<noscript>` under the submit button with a plain `wa.me/212641236758` link and the `tel:` link. Do not set `action` to wa.me, because the CSP has `form-action 'self'`.
+- **B13 · P3** · `/surf/` and `/` ch02 "sets" · 360–430 · On mobile the 3-photo "set" turns into a horizontal snap-scroller that shows photo 1 and a sliver of photo 2. It has no swipe cue. The container (`role=group`) is not focusable, so keyboard users can't scroll it. The "growing wave 1-2-3" idea disappears on phones (`390-surf-set-scroller.jpg`). · **Fix:** add `tabindex="0"` and a small "1 / 3 — swipe" label. Or stack the set vertically on mobile at the three growing heights, which keeps the concept.
+- **B14 · P3** · `/anza/` band · 1440–1920 · `anza-view-1290` is stretched to the full window width, so it is soft at 1440 and visibly upscaled at 1920. The "| THE LINE-UP" label sits over the neighbour's white wall at the right edge, white on white (`fold-1440-anza.jpg`, `fold-1920-anza.jpg`). · **Fix:** cap the band at `max-width:1400px; margin-inline:auto`, or use the hi-res bk-45 at 1920w. Move the label to `right:22%`, or give it the caption's ink chip.
+
+**Counts:** P0 1 · P1 0 · P2 4 · P3 9.
