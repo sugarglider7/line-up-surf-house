@@ -127,7 +127,7 @@ Removed/softened in phase 3: "one staircase away" (ground-floor rooms exist) →
 | Prefill | `/book/?room=triple&extra=lessons&extra=taxi` preselects room + chips (used by "Ask for this room" / "Want a lesson?") |
 | Sticky dock | hidden over masthead/cover, every ask band, the whole booking section and the footer; never covers submit (checked at 7 scroll positions on /book/); fits one line at 360 px |
 | JSON-LD | Hostel on home (aggregateRating 9.6/10, 208 — verified), BreadcrumbList on inner pages; all parse |
-| `_headers` | /assets/* immutable 1 year; nosniff, referrer policy, X-Frame-Options DENY, HSTS, Permissions-Policy, CSP (self only; wa.me/tel/maps are plain navigations, unaffected) |
+| `_headers` | /assets/* immutable 1 year; nosniff, referrer policy, X-Frame-Options DENY, HSTS, Permissions-Policy, CSP (self + Cloudflare Web Analytics beacon that Pages injects; wa.me/tel/maps are plain navigations, unaffected) |
 
 ## 4. Performance (390 × 844, cache disabled, local preview — uncompressed; Cloudflare adds brotli on HTML/CSS/JS)
 | template | KB before scroll | requests | LCP element | CLS |
@@ -150,5 +150,8 @@ Round-1 → round-2 fixes: breakfast list overflowed the house page (no break op
 ## 6. WARN justification
 None — check_site reports 0 WARN.
 
-## 7. Live check
-See BUILD_STATUS.md "Deployment URL" / Log (filled after the final push).
+## 7. Live check (https://line-up-surf-house.peashoot.io/, deploy b962376, 390 px, one tab)
+- Home, /rooms/, /book/, /fr/, /fr/la-maison/, missing path → custom 404 (EN + FR text, HTTP 404): 0 failed requests, 0 console errors, 0 broken images, fonts load, no overflow, canonical = live URL on each page (none on 404). Screenshots `live-*-390.jpg`.
+- All 12 pages + sitemap.xml, robots.txt, favicons return 200; headers present (CSP, HSTS, X-Frame-Options; /assets/* immutable).
+- Live weight at 390 (brotli, incl. Cloudflare beacon): home 185 KB / 10 requests (HTML 9 KB), rooms 182 KB / 11, book 121 KB / 8.
+- First check failed the "no failed requests" bar: Cloudflare injects its Web Analytics beacon, which the first CSP blocked → CSP now allows `static.cloudflareinsights.com` (script) + `cloudflareinsights.com` (connect); re-checked clean.
