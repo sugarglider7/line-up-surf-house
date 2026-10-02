@@ -2,6 +2,19 @@
 
 _Last updated: 2026-10-02 (phase 4 fix pass: Audit A + B findings applied, deployed, live-verified) by FixLineUp_
 
+## FINAL STATE — orchestrator sign-off (2026-10-02 08:15 UTC)
+- **Status: COMPLETE — deployed and owner-showable.** Live: https://line-up-surf-house.peashoot.io/ (Cloudflare Pages, domain active, live commit f3ed912).
+- Pages: 6 EN + 6 FR + bilingual 404 (13).
+- Conversion: 'Ask for dates' form (dates, guests, room, extras: lessons / board & wetsuit / airport-taxi help / home-cooked meal) → wa.me/212641236758; tel fallback; Booking.com secondary.
+- QA: Audit A 21 + Audit B 14 (1 P0 wide-desktop hero) → 35/35 fixed. check_site OK (13 pages). Live 390 + 1920 checks pass.
+- Cross-site checks passed: differentiation (type, hero, nav, grid, motion distinct from the other two and from hyle/agadir-trip), AI-copy scan clean, owner-embarrassment audit applied, live mobile inspection at 390.
+- Redeploy after any push: `/home/agent/agadir-pilot/tools/cf-static-deploy.sh line-up-surf-house deploy` (pushes don't auto-deploy).
+- Questions for the owner (Fadwa) — everything uncertain is omitted or softened on the site until answered:
+  - Is 06 41 23 67 58 on WhatsApp (site uses it)?
+  - Spelling of Saïd / Zohair and OK to be named?
+  - Lesson formats/prices we may show; Reef room bathroom set-up
+  - Photos of the roof, breakfast, the family and lessons; full-size original of the hero view
+
 ## Recovered state (resume of crashed run "agadir-batch2")
 - Prior run left ONLY raw material (no repo, no status files, no code, no deployment):
   raw page dumps + downloaded images, now in `research/raw/` (gitignored; on disk at /home/agent/agadir-pilot/sites/line-up-surf-house/research/raw/). Original copy still at /tmp/sites2/line-up-surf-house/.
