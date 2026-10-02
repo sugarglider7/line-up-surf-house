@@ -1,6 +1,6 @@
 # BUILD STATUS — line-up-surf-house
 
-_Last updated: 2026-10-02 (phase 2 design + EN homepage complete) by DesignLineUp_
+_Last updated: 2026-10-02 (phase 3 in progress: all pages EN + FR built, QA running) by BuildLineUp_
 
 ## Recovered state (resume of crashed run "agadir-batch2")
 - Prior run left ONLY raw material (no repo, no status files, no code, no deployment):
@@ -28,12 +28,12 @@ _Last updated: 2026-10-02 (phase 2 design + EN homepage complete) by DesignLineU
 - Design system: `site/assets/css/site.css` (27.7 KB), `site/assets/js/site.js` (7.5 KB, deferred), favicon.svg + favicon-32.png + apple-touch-icon.png.
 
 ## Pages implemented
-- `/` (EN homepage, final quality) · `/404.html` · sitemap.xml · robots.txt · _headers
+- EN: `/` · `/rooms/` · `/surf/` · `/house/` · `/anza/` · `/book/`
+- FR: `/fr/` · `/fr/chambres/` · `/fr/surf/` · `/fr/la-maison/` · `/fr/anza/` · `/fr/reserver/`
+- `/404.html` (EN + FR text) · sitemap.xml (hreflang pairs) · robots.txt · _headers (cache + security headers)
 
 ## Pages remaining (phase 3)
-- EN: `/rooms/`, `/surf/`, `/house/` (family, breakfast, home cooking, rooftop, reviews), `/anza/`, `/book/` (full ask-for-dates form)
-- FR: `/fr/`, `/fr/chambres/`, `/fr/surf/`, `/fr/la-maison/`, `/fr/anza/`, `/fr/reserver/` — add `tools/content/fr.py` (same keys as en.py) + renderers in `RENDER`; hreflang + language switch appear automatically once both languages of a page are built.
-- Until built, nav/footer links point at homepage chapters (#rooms, #surf, #family, #anza, #ask) — `build.py` switches them to the real URLs automatically.
+- none — QA rounds, performance numbers, QA_CHECKLIST and live check in progress
 
 ## Factual uncertainties
 - WhatsApp: only phone found is 06 41 23 67 58 (+212 6 41 23 67 58) on the Google listing. ORCHESTRATOR DECISION (phase 2): use it for tel: AND wa.me/212641236758. **Open item: confirm with the owner that this number is on WhatsApp.**
@@ -68,3 +68,4 @@ _Last updated: 2026-10-02 (phase 2 design + EN homepage complete) by DesignLineU
 - round 1 (390 + 1440): Newsreader files were swapped (italic served as roman) → fixed; mobile H1 broke into 4 lines → resized; Booking button wrapped under primary; desktop hero box shrank (aspect-ratio + max-height) leaving a white strip and misaligning the horizon → width:100%; hero copy sat over the white building → moved left; "Today, maybe" dots started lines → nbsp separators; rooms rows too tall on desktop → 180 px square thumbs; sepia late-light duotone looked vintage → slate/haze tone, frame edge cropped; submit label wrapped → "Continue in WhatsApp".
 - round 2 (390 + 1440): mobile H1 too timid (2 small lines, empty sky) → 12.3vw / 110 % width, 3 lines standing on the horizon; "Ask for dates" wrapped beside the Booking button → single full-width primary + "9.6 on Booking.com · Book there" link line; spec labels column too wide on mobile → 6em.
 - round 3 (390 + 1440 + 360): fold verified on both; ch1 window photo now sticky on desktop; breakfast items no longer break mid-item; en-GB date format in the WhatsApp text; nav sheet + form + success state screenshots saved; tab closed, preview stopped.
+- phase 3: inner pages built from the page map (rooms, surf, house, anza, book) + full FR mirror (`tools/content/fr.py`, same keys, French review quotes from the captured corpus); masthead "day strip" (five hours on one horizon, sun at the page's hour), time-of-day markers inside pages, "The day goes on" band linking pages in day order; 8 new image outputs (Anza band levelled −2.69° so the line-up hairline sits on the real horizon); book form prefill (`?room=`, `?extra=`), robust date parsing, FR spacing (NBSP before : ; ! ? »).

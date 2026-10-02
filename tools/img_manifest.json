@@ -1,4 +1,30 @@
 {
+ "anza-view": {
+  "color": "#7a90a3",
+  "h": 860,
+  "horizon": 0.45,
+  "variants": [
+   {
+    "file": "anza-view-800.webp",
+    "h": 533,
+    "kb": 33.8,
+    "w": 800
+   },
+   {
+    "file": "anza-view-1200.webp",
+    "h": 800,
+    "kb": 51.2,
+    "w": 1200
+   },
+   {
+    "file": "anza-view-1290.webp",
+    "h": 860,
+    "kb": 53.8,
+    "w": 1290
+   }
+  ],
+  "w": 1290
+ },
  "boards": {
   "color": "#798289",
   "h": 1500,
@@ -96,6 +122,25 @@
   ],
   "w": 1080
  },
+ "mural": {
+  "color": "#7a91a0",
+  "h": 1500,
+  "variants": [
+   {
+    "file": "mural-640.webp",
+    "h": 800,
+    "kb": 46.4,
+    "w": 640
+   },
+   {
+    "file": "mural-1000.webp",
+    "h": 1250,
+    "kb": 95.0,
+    "w": 1000
+   }
+  ],
+  "w": 1200
+ },
  "og": {
   "color": "#91a3b2",
   "h": 630,
@@ -108,6 +153,25 @@
    }
   ],
   "w": 1200
+ },
+ "reef-plaque": {
+  "color": "#83867f",
+  "h": 1920,
+  "variants": [
+   {
+    "file": "reef-plaque-480.webp",
+    "h": 600,
+    "kb": 17.1,
+    "w": 480
+   },
+   {
+    "file": "reef-plaque-800.webp",
+    "h": 1000,
+    "kb": 34.8,
+    "w": 800
+   }
+  ],
+  "w": 1536
  },
  "room-compact": {
   "color": "#9b9488",
@@ -147,6 +211,25 @@
   ],
   "w": 1536
  },
+ "room-private-twin": {
+  "color": "#8a8980",
+  "h": 844,
+  "variants": [
+   {
+    "file": "room-private-twin-480.webp",
+    "h": 600,
+    "kb": 14.0,
+    "w": 480
+   },
+   {
+    "file": "room-private-twin-675.webp",
+    "h": 844,
+    "kb": 22.3,
+    "w": 675
+   }
+  ],
+  "w": 675
+ },
  "room-seaview": {
   "color": "#877d67",
   "h": 1888,
@@ -165,6 +248,25 @@
    }
   ],
   "w": 1536
+ },
+ "room-seaview-dbl": {
+  "color": "#7d7767",
+  "h": 844,
+  "variants": [
+   {
+    "file": "room-seaview-dbl-480.webp",
+    "h": 600,
+    "kb": 16.9,
+    "w": 480
+   },
+   {
+    "file": "room-seaview-dbl-675.webp",
+    "h": 844,
+    "kb": 26.7,
+    "w": 675
+   }
+  ],
+  "w": 675
  },
  "room-triple": {
   "color": "#8f8779",
@@ -185,6 +287,44 @@
   ],
   "w": 1536
  },
+ "room-triple-3": {
+  "color": "#817e79",
+  "h": 1920,
+  "variants": [
+   {
+    "file": "room-triple-3-480.webp",
+    "h": 600,
+    "kb": 20.8,
+    "w": 480
+   },
+   {
+    "file": "room-triple-3-800.webp",
+    "h": 1000,
+    "kb": 42.7,
+    "w": 800
+   }
+  ],
+  "w": 1536
+ },
+ "shop-inside": {
+  "color": "#827c64",
+  "h": 1500,
+  "variants": [
+   {
+    "file": "shop-inside-640.webp",
+    "h": 800,
+    "kb": 47.5,
+    "w": 640
+   },
+   {
+    "file": "shop-inside-1000.webp",
+    "h": 1250,
+    "kb": 103.5,
+    "w": 1000
+   }
+  ],
+  "w": 1200
+ },
  "shopfront": {
   "color": "#7c7b7b",
   "h": 1480,
@@ -203,6 +343,25 @@
    }
   ],
   "w": 1200
+ },
+ "view-window": {
+  "color": "#5f7187",
+  "h": 1920,
+  "variants": [
+   {
+    "file": "view-window-640.webp",
+    "h": 800,
+    "kb": 24.1,
+    "w": 640
+   },
+   {
+    "file": "view-window-1000.webp",
+    "h": 1250,
+    "kb": 41.4,
+    "w": 1000
+   }
+  ],
+  "w": 1536
  },
  "wetsuits": {
   "color": "#827960",

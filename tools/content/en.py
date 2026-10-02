@@ -23,6 +23,7 @@ UI = {
     "lang_switch_short": "FR",
     "ext": "opens in a new tab",
     "wa_hello": "Hello Line Up! I'd like to ask about a stay.",
+    "og_alt": "The LINE UP mural on our house in Anza: accommodation, Surf School, Shop",
 }
 
 # Navigation: page keys resolve to the built page, or to a homepage anchor until that page exists.
@@ -38,6 +39,31 @@ PAGES_META = {
         "title": "Line Up Surf House · Anza, Agadir — surf house beside the break",
         "description": "Eight private rooms a few steps from Anza beach, breakfast made by our family, and our own surf school and board shop on the ground floor. Ask for dates on WhatsApp.",
         "og_title": "Line Up Surf House — stay beside the break in Anza",
+    },
+    "rooms": {
+        "title": "Rooms · Line Up Surf House, Anza — eight private rooms by the beach",
+        "description": "Eight private rooms a few steps from Anza beach: sea-view doubles, twins and triples, and rooms with their own shower room. Breakfast included, no dorms.",
+        "crumb": "Rooms",
+    },
+    "surf": {
+        "title": "Surf school & shop · Line Up Surf House, Anza",
+        "description": "Our own surf school and shop on the ground floor, a few steps from Anza beach: lessons from your first wave, soft-tops, hard boards and wetsuits to rent.",
+        "crumb": "Surf school",
+    },
+    "house": {
+        "title": "The house · Line Up Surf House, Anza — breakfast, family, the roof",
+        "description": "A family-run surf house on Anza beach: breakfast made at home every morning, a tajine if you order ahead, help with taxis and day trips, and a roof terrace over the sea.",
+        "crumb": "The house",
+    },
+    "anza": {
+        "title": "Anza, Agadir · Line Up Surf House — the beach out the front door",
+        "description": "Anza is a quiet, local surf town on the edge of Agadir. The beach is across the car park, there are dinosaur footprints along the shore, and we help with taxis and day trips.",
+        "crumb": "Anza",
+    },
+    "book": {
+        "title": "Ask for dates · Line Up Surf House, Anza",
+        "description": "Pick your dates, room and extras, and the form writes a WhatsApp message to our family. We reply with availability and today’s price. Or call, or book on Booking.com.",
+        "crumb": "Ask for dates",
     },
     "404": {
         "title": "Page not found · Line Up Surf House",
@@ -70,6 +96,7 @@ HOME = {
         "bf_maybe": "Today, maybe",
         "bf_items": ["fresh orange juice", "eggs", "Moroccan pancakes", "bread", "honey", "olives", "mint tea or coffee"],
         "bf_note": "Gluten-free? Leaving for an early flight? Tell us, and we’ll do what we can.",
+        "more": ("house", "Breakfast, the family and the roof", "#breakfast"),
         "quote": "The breakfast was simple and tasty, and came with a great view from the rooftop.",
         "quote_by": "Katharina, Canada",
         "quote_src": "Booking.com",
@@ -90,6 +117,7 @@ HOME = {
         "quote_by": "Youness, Morocco",
         "quote_src": "Booking.com",
         "set_label": "Line Up surf school and shop",
+        "more": ("surf", "Lessons, rental and the shop"),
         "set": [
             ("shopfront", "The front of Line Up: white house with blue window frames, the shop doors open under the LINE UP mural, a blue surfboard on trestles", "Our shop door. The banner says: “We are not the only ones but we are the best.”"),
             ("boards", "Yellow soft-top surfboards leaning against the painted LINE UP mural outside the shop", "Soft-tops, ready by the mural"),
@@ -120,6 +148,8 @@ HOME = {
              "alt": "The pine door of the ‘Open face’ room at Line Up, its wooden name plaque above, and a double bed inside"},
         ],
         "rooms_note": "Check-in 14:00 to midnight · check-out by 12:00 · children over 5 welcome · no cribs or extra beds · no pets, no parties",
+        "more": ("rooms", "All four kinds of room, in detail"),
+        "more_anza": ("anza", "More about Anza"),
         "lunch_title": "Lunch at home, if you ask",
         "lunch_text": "Order ahead and the family will cook a Moroccan meal for lunch or dinner — a chicken or kefta tajine, maybe lubya. It’s home cooking, not a restaurant, and it’s paid separately.",
         "anza_id": "anza",
@@ -143,6 +173,7 @@ HOME = {
         "lead": "Late in the day the boards go out again. Some evenings one of the brothers paddles out too — not a lesson, just a surf.",
         "fam_title": "A family house",
         "fam_text": "Line Up is our family’s house. Saïd and Zohair are brothers, the family makes breakfast, and between the shop, the house and the water there’s nearly always one of us around. Ask any of us anything.",
+        "more": ("house", "The family and the house", "#family"),
         "stat": "10",
         "stat_label": "Staff score on Booking.com",
         "stat_note": "We’re a small family, so that one is personal.",
@@ -162,6 +193,7 @@ HOME = {
         "roof_lines": ["Breakfast up top", "The line-up all day", "Sunset at the end of it"],
         "img_alt": "Hazy late light over the sea and Anza beach, seen through a sea-view room window (toned photograph)",
         "caption": "Late light over Anza beach, from a sea-view room",
+        "more": ("house", "The roof, and dinner if you ask", "#roof"),
     },
     "ask": {
         "id": "ask",
@@ -189,7 +221,7 @@ FORM = {
         ("lessons", "Surf lessons"),
         ("rental", "Board & wetsuit rental"),
         ("taxi", "Help with an airport taxi"),
-        ("meals", "Home-cooked lunch or dinner"),
+        ("meals", "Home-cooked meal (on request)"),
     ],
     "name": "Your name",
     "note": "Anything else?",
@@ -205,6 +237,7 @@ FORM = {
     },
     "msg": {
         "hello": "Hello Line Up! I'd like to ask about a stay.",
+        "sep": ": ",
         "checkin": "Check-in",
         "checkout": "Check-out",
         "nights_one": "night",
@@ -243,4 +276,257 @@ NOT_FOUND = {
     "title": "Wiped out.",
     "text": "That page isn’t here. The beach still is.",
     "back": "Back to Line Up",
+}
+
+# ------------------------------------------------------------------ inner pages (phase 3)
+# The day, as the masthead strip shows it (homepage chapter names).
+DAY = ["First light", "First session", "Midday", "Second session", "Sunset"]
+
+ASK_BAND = {
+    "text": "Tell us your dates and who’s coming. The form writes the WhatsApp message for you, and we reply with availability and today’s price.",
+    "wa": "Or just WhatsApp us",
+    "booking": "Or book on Booking.com",
+}
+
+# "The day goes on" — next page in the order of the day: (hour, page)
+NEXT = {
+    "label": "The day goes on",
+    "surf": ("First session", "The surf school"),
+    "rooms": ("Midday", "The rooms"),
+    "anza": ("Afternoon", "Anza"),
+    "book": ("Sunset", "Ask for dates"),
+    "home": ("Tomorrow", "A whole day at Line Up"),
+}
+
+ROOMS = {
+    "mast": {
+        "t": .5, "tone": "noon", "hour": "Midday", "kicker": "The rooms",
+        "h1": "Eight private rooms.",
+        "lead": "Four of them look straight over the beach to the surf. All eight are private, new and very clean — no dorms, no bunks. Find the one that fits your trip.",
+        "img": "view-window",
+        "img_alt": "A black window frame in a sea-view room at Line Up, around the beach car park, the sand and the sea under a blue sky",
+        "caption": "From a sea-view room",
+    },
+    "ask_room": "Ask for this room",
+    "types": [
+        {"id": "sea-view", "room": "seaview", "kind": "Sea view", "name": "Double or twin", "count": "×2",
+         "blurb": "Wake up, open the shutter, check the water. These two rooms look over the car park and the sand straight to the surf.",
+         "specs": [("Beds", "A king bed or two singles"), ("Guests", "Up to 2"),
+                   ("Bathroom", "Shared, just outside the room"), ("Window", "Over the beach and the sea")],
+         "imgs": [("room-seaview", "Sea-view room at Line Up set up as a twin: two single beds with brown covers and a folded LINE UP towel", "Set up as a twin"),
+                  ("room-seaview-dbl", "Sea-view room at Line Up set up as a double: a wide bed with cushions under a window", "Set up as a double")]},
+        {"id": "triple", "room": "triple", "kind": "Sea view", "name": "Triple", "count": "×2",
+         "blurb": "For three friends on a surf trip, or a family with a child over 5. Same view, one more bed.",
+         "specs": [("Beds", "Three singles, or a single and a king"), ("Guests", "Up to 3"),
+                   ("Bathroom", "Shared, just outside the room"), ("Window", "Over the beach and the sea")],
+         "imgs": [("room-triple", "Sea-view triple at Line Up: a bed beside a wide open window, the beach and the sea outside", "The window side"),
+                  ("room-triple-3", "Sea-view triple at Line Up: three single beds with brown covers and LINE UP towels", "Three singles")]},
+        {"id": "private-bathroom", "room": "private", "kind": "Private bathroom", "name": "Double or twin", "count": "×2",
+         "blurb": "Your own shower room, inside the room. White walls, pine beds, LINE UP towels folded on the covers.",
+         "specs": [("Beds", "A king bed or two singles"), ("Guests", "Up to 2"), ("Bathroom", "Your own shower room")],
+         "imgs": [("room-private", "Double room with private bathroom at Line Up: a wide bed with LINE UP towels in a clean white room", "Set up as a double"),
+                  ("room-private-twin", "Twin room with private bathroom at Line Up: two pine single beds with olive covers and a coat stand", "Set up as a twin")]},
+        {"id": "compact", "room": "compact", "kind": "Compact", "name": "Double or twin", "count": "×2",
+         "blurb": "Our two compact rooms, behind the pine doors marked “Open face” and “Reef room”.",
+         "specs": [("Beds", "A king bed or two singles"), ("Guests", "Up to 2"), ("Bathroom", "Ask us about the bathroom set-up")],
+         "plaques": ["Open face", "Reef room"],
+         "imgs": [("room-compact", "The pine door of the ‘Open face’ room at Line Up, its wooden name plaque above, and a double bed inside", "“Open face”"),
+                  ("reef-plaque", "The open pine door of the ‘Reef room’ at Line Up under its oval name plaque, two single beds with blue floral covers inside", "“Reef room”")]},
+    ],
+    "every": {
+        "label": "Every room",
+        "title": "What every room has. And what we don’t do.",
+        "has_title": "In every room",
+        "has": ["A private room — no dorms, no bunk beds", "LINE UP towels", "A shower, in the room or just outside it",
+                "Free Wi-Fi", "Non-smoking", "Breakfast included"],
+        "not_title": "Not here",
+        "not": ["Cribs or extra beds", "Pets", "Parties"],
+        "doors_title": "Names on the doors",
+        "doors_text": "Some of our doors carry names from the water. Look for these two.",
+        "plaques": ["Open face", "Reef room"],
+        "arrive_title": "Arriving and leaving",
+        "arrive": [("Check-in", "14:00 to midnight"), ("Check-out", "By 12:00"),
+                   ("Early flight", "Tell us — we’ll do what we can about breakfast before you go"),
+                   ("Airport", "A taxi ride — we can help arrange it"),
+                   ("By car", "Free public car park beside the house"),
+                   ("Children", "Over 5 welcome")],
+    },
+    "quote": ("Fantastic location, literally just a few steps from the beach.", "Rafal, Poland", "Booking.com"),
+    "cta_title": "Found your room?",
+}
+
+SURF = {
+    "mast": {
+        "t": .25, "tone": "sky", "hour": "First session", "kicker": "The surf school",
+        "h1": "The surf school is downstairs.",
+        "lead": "Line Up is a house with its own surf school and shop on the ground floor. Lessons, boards and wetsuits are one staircase away, and the beach is just across the car park.",
+        "img": "shop-inside",
+        "img_alt": "Inside the Line Up shop: racks of yellow soft-top surfboards, a blue plastic chair and a wooden floor",
+        "caption": "Inside our shop",
+    },
+    "lessons": {
+        "label": "Lessons",
+        "title": "From your first wave.",
+        "lead": "First-timers and improvers, adults and kids. Tell us your level, how many of you there are and how long you’re staying, and we’ll suggest what suits you.",
+        "specs": [("Level", "First-timers and improvers"), ("Format", "Private, or in a small group"),
+                  ("Kids", "Welcome — tell us their age"), ("Price", "Ask for today’s price on WhatsApp")],
+        "who": "Zohair is often the one in the water with you.",
+        "quotes": [
+            ("He was very professional, patient, he explained everything and he was with us all the time in the water.", "Youness, Morocco", "Booking.com"),
+            ("If you are looking for a place to learn or practice surfing that's the place I would recommend.", "Piekarec, Poland", "Booking.com"),
+        ],
+    },
+    "rental": {
+        "label": "Rental",
+        "title": "Boards and wetsuits at the door.",
+        "lead": "Soft-tops to learn on, hard boards for when you’re ready, wetsuits on the rail.",
+        "text": "Pick up at the shop, cross the car park, paddle out. Not staying with us? Come by the shop and ask.",
+        "quotes": [("we rented surfing equipment from them and they also arranged a surf instructor for us.", "Rafal, Poland", "Booking.com")],
+        "set_label": "The Line Up shop",
+        "set": [
+            ("logo-board", "The nose of a yellow Line Up board with the round ‘Line Up · Surf house’ logo, lying on the sand in low sun", "Our logo, on one of our boards"),
+            ("boards", "Yellow soft-top surfboards leaning against the painted LINE UP mural outside the shop", "Soft-tops, ready by the mural"),
+            ("wetsuits", "Inside the Line Up shop: wetsuits on a rail, yellow Line Up T-shirts and a rack of yellow boards", "Wetsuits, boards, Line Up tees"),
+        ],
+    },
+    "water": {
+        "label": "The water",
+        "title": "Check it from the window.",
+        "lead": "Anza beach is right in front of the house. From the sea-view rooms and the roof you can watch the surf before you decide whether to go.",
+        "text": "We don’t do forecasts. We have a window.",
+        "img": "window",
+        "img_alt": "A dark window frame in a sea-view room at Line Up, looking over the beach car park to the sand and the sea",
+        "caption": "From a sea-view room",
+        "quotes": [("you can see the two main surf breaks in town from the window and roof of the property", "Marta, Netherlands", "Booking.com")],
+    },
+    "cta_title": "Want a lesson?",
+}
+
+HOUSE = {
+    "mast": {
+        "t": 0, "tone": "dawn", "hour": "First light", "kicker": "The house",
+        "h1": "A family house on Anza beach.",
+        "lead": "Line Up is our family’s house: breakfast from our kitchen every morning, two brothers between the shop, the house and the water, and a roof over the beach for the end of the day.",
+        "img": "mural",
+        "img_alt": "The LINE UP mural on our wall — accommodation, Surf School, Shop — painted over a blue sea with palm trees",
+        "caption": "Our wall, our words",
+    },
+    "breakfast": {
+        "label": "First light",
+        "title": "Breakfast, made at home.",
+        "lead": "Breakfast comes with every room. Our family makes it every morning, it’s vegetarian and halal, and it changes from one day to the next. These days it’s served upstairs, with the sea in view.",
+        "maybe": "Today, maybe",
+        "items": ["fresh orange juice", "an omelette", "Moroccan pancakes", "bread", "pastries", "cheese", "olives", "honey", "mint tea or coffee"],
+        "note": "Gluten-free, or another diet? Leaving before sunrise for a flight? Tell us when you ask for dates, and we’ll do what we can.",
+        "quotes": [
+            ("The breakfast was just amazing, prepared with love and they served something different every day.", "Safae, Netherlands", "Booking.com"),
+            ("Mum and Dad prepare the breakfasts and one of the brothers will serve.", "Simon, United Kingdom", "Booking.com"),
+        ],
+    },
+    "family": {
+        "label": "All day",
+        "title": "Two brothers. One family. One house.",
+        "lead": "Line Up is family-run: our parents in the kitchen, and two brothers — Saïd and Zohair — between the shop, the house and the water. There’s nearly always one of us around.",
+        "said": "Saïd is usually the one sorting out taxis, trips and tips.",
+        "zohair": "Zohair is often the one in the water with you.",
+        "ask_title": "Ask us about",
+        "ask_items": ["A taxi into Agadir", "A taxi to the airport", "Day trips — Paradise Valley and more",
+                      "Renting a car", "A local SIM card", "Where to eat fried fish"],
+        "ask_note": "We speak Arabic, French and English.",
+    },
+    "cooking": {
+        "label": "Evening",
+        "title": "Tajine, if you ask ahead.",
+        "lead": "There’s no restaurant here and no menu. But order in advance and the family will cook a Moroccan meal at home — a chicken or kefta tajine, maybe lubya.",
+        "text": "It’s paid separately; ask for today’s price. Some evenings everyone ends up at the same table.",
+        "quotes": [("The food is the best, nice rooftop, clean and modern rooms", "Jochem, Netherlands", "Booking.com")],
+    },
+    "roof": {
+        "label": "Sunset",
+        "title": "The roof, at the end of the day.",
+        "lead": "Climb past the rooms to the roof terrace. From up there you see the whole beach and the surf, and in the evening the sun goes down over the Atlantic.",
+        "word": "The roof",
+        "lines": ["Breakfast up top", "The line-up all day", "Sunset at the end of it"],
+        "quotes": [("gave many options to chill, see the sunset and be surrounded by the beach waves.", "Erika, Austria", "Booking.com")],
+    },
+    "scores": {
+        "title": "What our guests give us.",
+        "items": [("9.6", "on Booking.com"), ("10", "for staff, on Booking.com"),
+                  ("9.8", "for value for money, on Booking.com"), ("4.9", "on Google")],
+        "note": "We’re a small family, so the staff score is personal.",
+        "quotes": [
+            ("Excellent service very friendly people breakfast was good worth every penny.", "Ahmed, United States", "Booking.com"),
+            ("It felt like home as staff treat you as a member of family.", "Garig, Belgium", "Booking.com"),
+            ("Booked two nights but ended up extending my stay to a week", "Zoe, United Kingdom", "Booking.com"),
+        ],
+    },
+    "rules": {
+        "title": "House rules, short version.",
+        "text": "A family house by the beach, not a party hostel.",
+        "items": [("Check-in", "14:00 to midnight"), ("Check-out", "By 12:00"),
+                  ("Children", "Over 5 welcome; no cribs or extra beds"), ("Pets", "Not allowed"),
+                  ("Parties", "Not allowed"), ("We speak", "Arabic, French, English")],
+    },
+    "cta_title": "Come and stay.",
+}
+
+ANZA = {
+    "mast": {
+        "t": .62, "tone": "sand", "hour": "Afternoon", "kicker": "Anza",
+        "h1": "Anza, out the front door.",
+        "lead": "A quiet, local surf town on the edge of Agadir — less polished than Taghazout, and we like it that way.",
+        "img": "anza-view", "wide": True,
+        "img_alt": "Anza from upstairs at Line Up: the beach car park, the sand, rows of white water and the Atlantic horizon under a blue sky",
+        "caption": "Anza beach from upstairs at Line Up",
+    },
+    "front": {
+        "label": "Out the front door",
+        "title": "House. Car park. Sand. Surf.",
+        "xs_label": "From the house to the line-up",
+        "xs": [("house", "Line Up", "The house, the shop downstairs"),
+               ("park", "The car park", "Free public parking"),
+               ("sand", "Anza beach", "The sand"),
+               ("surf", "White water", "Where the waves break"),
+               ("line", "The line-up", "Where surfers wait for the next set")],
+        "lead": "There’s nothing between us and the beach but the open car park. Carry your board across and you’re on the sand. If you come by car, the public car park beside the house is free.",
+        "quotes": [("Fantastic location, literally just a few steps from the beach.", "Rafal, Poland", "Booking.com")],
+    },
+    "wander": {
+        "label": "Afternoon",
+        "title": "A local surf town.",
+        "lead": "Anza isn’t a resort strip. It’s a small town by the sea, with simple cafés and fried fish, and a long beach in front.",
+        "text": "Real, not polished. Ask us where to eat.",
+        "fp_title": "Dinosaur footprints",
+        "fp_text": "Walk along the rocky shore nearby and you’ll find dinosaur footprints pressed into the rock — the oldest visitors to Anza. Ask us for the way.",
+        "quotes": [],
+    },
+    "around": {
+        "label": "Getting around",
+        "title": "Buses, taxis and day trips.",
+        "specs": [("Bus", "A stop a few minutes’ walk away"), ("Taxi", "We’ll help you get one"),
+                  ("Airport", "A taxi ride — we can help arrange it"), ("By car", "Free public car park beside the house")],
+        "who": "Saïd is usually the one sorting out taxis, trips and tips.",
+        "trips_title": "Day trips? Ask us.",
+        "trips_text": "Paradise Valley and more: tell us what you’d like to see and we’ll help you set it up — or help you find a rental car.",
+        "find_title": "Find us",
+    },
+    "cta_title": "Come and see Anza.",
+}
+
+BOOK = {
+    "mast": {
+        "t": 1, "tone": "dusk", "hour": "Sunset", "kicker": "Plan the next one",
+        "h1": "Ask for dates.",
+        "lead": "Tell us when you’re coming and who’s coming. The form writes a WhatsApp message to our family — you just press send. We reply with availability and today’s price.",
+    },
+    "quote": ("Booked two nights but ended up extending my stay to a week", "Zoe, United Kingdom", "Booking.com"),
+    "form_label": "Ask for dates form",
+    "how_title": "How it works",
+    "steps": ["Fill in your dates and who’s coming.", "Tap “Continue in WhatsApp”: your message opens, ready to send.",
+              "Send it. We reply with availability and today’s price."],
+    "other_title": "Rather talk?",
+    "know_title": "Good to know",
+    "know": [("Check-in", "14:00 to midnight"), ("Check-out", "By 12:00"), ("Breakfast", "Included"),
+             ("Children", "Over 5 welcome; no cribs or extra beds"), ("Pets, parties", "Not allowed")],
+    "find_title": "Find us",
 }

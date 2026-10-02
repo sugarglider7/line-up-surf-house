@@ -3,7 +3,7 @@
 
     python3 tools/build.py
 
-Content: tools/content/en.py (and fr.py — same keys — once phase 3 adds it).
+Content: tools/content/en.py and tools/content/fr.py (same keys; FR = parallel copy, not a translation).
 Images:  tools/img_manifest.json (written by tools/images.py).
 Pages:   PAGES below. A page is rendered only if its renderer exists in RENDER; links to
          pages that are not built yet fall back to the matching homepage chapter anchor,
@@ -20,7 +20,7 @@ REPO = os.path.dirname(TOOLS)
 SITE = os.path.join(REPO, "site")
 ORIGIN = "https://line-up-surf-house.peashoot.io"
 
-PHONE_INTL = "+212 6 41 23 67 58"
+PHONE_INTL = "+212\u00a06\u00a041\u00a023\u00a067\u00a058"  # displayed number; NBSPs keep it on one line
 PHONE_TEL = "tel:+212641236758"
 WA = "https://wa.me/212641236758"
 BOOKING = "https://www.booking.com/hotel/ma/line-up-surf-house.html"
@@ -145,7 +145,7 @@ def head(c, key, lang, extra_ld=None):
 <meta property="og:image" content="{og_img}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="The LINE UP mural on the house in Anza: accommodation, Surf School, Shop">
+<meta property="og:image:alt" content="{a(c.UI['og_alt'])}">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
@@ -250,18 +250,168 @@ def footer(c, key, lang):
 </footer>"""
 
 
-def marker(ch, pos):
-    """Chapter marker: a horizon rule with the sun at this chapter's place in the day (pos 0..4)."""
-    x, sy = (6, 28, 50, 72, 94)[pos], (-15, 2, 13, 2, -15)[pos]
+def sun_at(t):
+    """Sun position for a time of day t (0 = first light, 1 = sunset): x along the rule, height of the arc."""
+    import math
+    return round(6 + 88 * t, 1), round(-15 + 28 * math.sin(math.pi * t))
+
+
+def marker(ch, pos=None, t=None):
+    """Chapter marker: a horizon rule with the sun at this chapter's place in the day.
+    pos = homepage chapter index 0..4; t = any time of day 0..1 (inner pages)."""
+    x, sy = sun_at(pos / 4 if t is None else t)
+    n = f'<span class="mk__n">{ch["n"]}</span> ' if ch.get("n") else ""
     return f"""<div class="mk" data-reveal style="--x:{x}%;--sy:{sy}px">
 <div class="mk__sky" aria-hidden="true"><span class="sun"></span></div>
 <div class="mk__sea" aria-hidden="true"></div>
-<p class="mk__label"><span class="mk__n">{ch['n']}</span> {ch['label']}</p>
+<p class="mk__label">{n}{ch['label']}</p>
 </div>"""
 
 
-def quote_block(text, by, src, cls=""):
-    return f"""<figure class="q {cls}"><blockquote><p>“{text}”</p></blockquote><figcaption>{by} <span>· {src}</span></figcaption></figure>"""
+def quote_block(text, by, src, cls="", ql=None, lang="en"):
+    """A real review quote, never translated. ql = language of the quote; lang = page language."""
+    ql = ql or lang
+    la = f' lang="{ql}"' if ql != lang else ""
+    o, cl = ("« ", " »") if ql == "fr" else ("“", "”")
+    return f"""<figure class="q {cls}"><blockquote{la}><p>{o}{text}{cl}</p></blockquote><figcaption>{by} <span>· {src}</span></figcaption></figure>"""
+
+
+def quotes(items, lang, cls=""):
+    """items: (text, by, src[, quote_lang]) tuples."""
+    return "".join(quote_block(*q[:3], cls=cls, ql=q[3] if len(q) > 3 else None, lang=lang) for q in items)
+
+
+def more(ch, lang, cls="", key="more"):
+    """'Read more' link from a homepage chapter (or any block) to its dedicated page: (page, label[, #frag])."""
+    spec = ch.get(key)
+    if not spec:
+        return ""
+    page, label = spec[0], spec[1]
+    frag = spec[2] if len(spec) > 2 else ""
+    return f'<p class="more {cls}"><a href="{href(page, lang)}{frag}">{label}<span aria-hidden="true"> →</span></a></p>'
+
+
+def specs(items, cls=""):
+    rows = "".join(f"<div><dt>{k}</dt><dd>{v}</dd></div>" for k, v in items)
+    return f'<dl class="specs {cls}">{rows}</dl>'
+
+
+DAY_ORDER = ["house", "surf", "rooms", "anza", "book"]  # inner pages in the order of the day
+
+
+def day_strip(c, t):
+    """Masthead strip: the day as one horizon rule — five chapter ticks, the sun at this page's hour."""
+    x, sy = sun_at(t)
+    now = round(t * 4) if abs(t * 4 - round(t * 4)) < .15 else -1
+    ticks = "".join(
+        f'<li style="--tx:{6 + 22 * i}%"{" class=is-now" if i == now else ""}>{lab}</li>' for i, lab in enumerate(c.DAY)
+    )
+    return f"""<div class="day" aria-hidden="true" data-reveal style="--x:{x}%;--sy:{sy}px">
+<div class="day__sky"><span class="sun"></span></div>
+<ol class="day__ticks">{ticks}</ol>
+</div>"""
+
+
+def masthead(c, lang, M, eager_img=True):
+    """Inner-page cover: the day strip, the hour, the H1, a lead and one real photo.
+    M['wide'] → full-width horizon band (photo with the line-up drawn on its real horizon)."""
+    fig = ""
+    if M.get("img") and M.get("wide"):
+        m = MANIFEST[M["img"]]
+        r_img = m["w"] / m["h"]
+        r_d, p = 2.4, .42  # desktop band ratio + object-position y
+        k = r_d / r_img
+        hz_d = m["horizon"] * k - (k - 1) * p
+        fig = f"""<figure class="band" style="--hz-m:{m['horizon']};--hz-d:{hz_d:.4f};--ar:{m['w']}/{m['h']};--py:{p * 100:.0f}%">
+{img(M['img'], M['img_alt'], '100vw', 'band__img', eager=eager_img)}
+<div class="band__hz" aria-hidden="true"><span>{c.HOME['cover']['horizon']}</span></div>
+<figcaption class="band__cap">{M['caption']}</figcaption>
+</figure>"""
+    elif M.get("img"):
+        fig = f"""<figure class="mast__fig">{img(M['img'], M['img_alt'], '(min-width: 960px) 38vw, 100vw', eager=eager_img)}<figcaption>{M['caption']}</figcaption></figure>"""
+    wide = M.get("wide")
+    return f"""<section class="mast mast--{M['tone']}{' mast--wide' if wide else ''}{'' if M.get('img') else ' mast--bare'}" aria-labelledby="h1" data-cover>
+<div class="wrap">
+{day_strip(c, M['t'])}
+<div class="mast__grid">
+<div class="mast__text">
+<p class="mast__kicker"><span class="mk__n">{M['hour']}</span> · {M['kicker']}</p>
+<h1 id="h1">{M['h1']}</h1>
+<p class="lead mast__lead">{M['lead']}</p>
+</div>
+{'' if wide else fig}
+</div>
+</div>
+{fig if wide else ''}
+</section>"""
+
+
+def book_href(lang, room=None, extra=None):
+    q = "&".join(x for x in (f"room={room}" if room else "", f"extra={extra}" if extra else "") if x)
+    return href("book", lang) + (f"?{q}" if q else "")
+
+
+def ask_band(c, lang, title, room=None, extra=None):
+    """Yellow 'ask for dates' band closing every inner page (the full form lives on /book/)."""
+    A, ui = c.ASK_BAND, c.UI
+    return f"""<section class="ch ch--sun cta" aria-labelledby="t-cta" data-nodock>
+<div class="wrap cta__in">
+<div>
+<h2 class="h2" id="t-cta">{title}</h2>
+<p class="lead">{A['text']}</p>
+</div>
+<div class="cta__acts">
+<a class="btn btn--ink" href="{book_href(lang, room, extra)}">{ui['cta_ask']}</a>
+<a class="cta__link" href="{wa_link(ui['wa_hello'])}" rel="noopener" target="_blank"><svg class="ic"><use href="#i-wa"/></svg>{A['wa']}</a>
+<a class="cta__link" href="{BOOKING}" rel="noopener" target="_blank">{A['booking']} <svg class="ic ic--s"><use href="#i-out"/></svg></a>
+</div>
+</div>
+</section>"""
+
+
+def next_band(c, key, lang):
+    """'The day goes on': link to the next inner page in the order of the day, sun at its hour."""
+    i = DAY_ORDER.index(key)
+    nxt = DAY_ORDER[(i + 1) % len(DAY_ORDER)] if i + 1 < len(DAY_ORDER) else "home"
+    lab = c.NEXT[nxt]
+    t = getattr(c, nxt.upper(), {}).get("mast", {}).get("t", 0) if nxt != "home" else 0
+    x, sy = sun_at(t)
+    return f"""<nav class="next" aria-label="{c.NEXT['label']}">
+<div class="wrap">
+<div class="mk next__mk" data-reveal style="--x:{x}%;--sy:{sy}px"><div class="mk__sky" aria-hidden="true"><span class="sun"></span></div><div class="mk__sea" aria-hidden="true"></div></div>
+<p class="next__label">{c.NEXT['label']}</p>
+<a class="next__a" href="{href(nxt, lang)}"><span class="next__hour">{lab[0]}</span><span class="next__t">{lab[1]}<span aria-hidden="true"> →</span></span></a>
+</div>
+</nav>"""
+
+
+def ld_breadcrumb(c, key, lang):
+    return {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Line Up Surf House", "item": ORIGIN + PAGES["home"][lang]},
+            {"@type": "ListItem", "position": 2, "name": strip_tags(c.PAGES_META[key]["crumb"]),
+             "item": ORIGIN + PAGES[key][lang]},
+        ],
+    }
+
+
+def page(c, key, lang, main, ld=None):
+    """Shell shared by every inner page."""
+    body = f"""<body class="inner p-{key}">
+{SVG_SPRITE}
+{header(c, key, lang)}
+{sheet(c, key, lang)}
+<main id="main">
+{main}
+</main>
+{next_band(c, key, lang) if key != 'book' else ''}
+{footer(c, key, lang)}
+{dock(c, lang)}
+</body>
+</html>"""
+    return head(c, key, lang, ld or ld_breadcrumb(c, key, lang)) + "\n" + body
 
 
 # ---------------------------------------------------------------- form
@@ -312,7 +462,7 @@ def ld_hostel(c):
         "image": [f"{ORIGIN}/assets/img/{MANIFEST['og']['variants'][0]['file']}",
                   f"{ORIGIN}/assets/img/{MANIFEST['hero-d']['variants'][-1]['file']}"],
         "description": c.PAGES_META["home"]["description"],
-        "telephone": PHONE_INTL,
+        "telephone": "+212641236758",
         "address": {"@type": "PostalAddress", "streetAddress": ADDRESS[0], "postalCode": "80090",
                     "addressLocality": "Agadir", "addressCountry": "MA"},
         "geo": {"@type": "GeoCoordinates", "latitude": 30.44686, "longitude": -9.659849},
@@ -354,7 +504,7 @@ def page_home(c, lang):
 <div class="wrap cover__band-in">
 <p class="cover__lead">{cv['lead']}</p>
 <div class="cover__acts">
-<a class="btn btn--sun" href="{href('book', lang)}">{ui['cta_ask']}</a>
+<a class="btn btn--sun" href="#{ask['id']}">{ui['cta_ask']}</a>
 </div>
 <p class="cover__rating"><span class="cover__score">{cv['rating_score']}</span> {cv['rating_on']}<a href="{BOOKING}" rel="noopener" target="_blank">{cv['rating_link']} <svg class="ic ic--s"><use href="#i-out"/></svg><span class="vh"> ({ui['ext']})</span></a></p>
 </div>
@@ -377,8 +527,9 @@ def page_home(c, lang):
 <p class="maybe__label">{c1['bf_maybe']}</p>
 <ul class="maybe">{bf_items}</ul>
 <p class="small">{c1['bf_note']}</p>
+{more(c1, lang)}
 </div>
-{quote_block(c1['quote'], c1['quote_by'], c1['quote_src'], 'q--ch1')}
+{quote_block(c1['quote'], c1['quote_by'], c1['quote_src'], 'q--ch1', c1.get('quote_lang'), lang)}
 </div>
 </div>
 </section>"""
@@ -396,10 +547,11 @@ def page_home(c, lang):
 <h2 class="h2" id="t2">{c2['title']}</h2>
 <p class="lead">{c2['lead']}</p>
 <dl class="specs">{items}</dl>
+{more(c2, lang, "more--light")}
 </div>
 <div class="ch2__who">
 <p class="who">{c2['who']}</p>
-{quote_block(c2['quote'], c2['quote_by'], c2['quote_src'], 'q--light')}
+{quote_block(c2['quote'], c2['quote_by'], c2['quote_src'], 'q--light', c2.get('quote_lang'), lang)}
 </div>
 </div>
 </div>
@@ -433,6 +585,7 @@ def page_home(c, lang):
 </div>
 <ol class="rooms__list">{''.join(rows)}</ol>
 <p class="rooms__note">{c3['rooms_note']}</p>
+{more(c3, lang)}
 </div>
 <div class="noon">
 <div class="noon__lunch">
@@ -442,6 +595,7 @@ def page_home(c, lang):
 <div class="noon__anza" id="{c3['anza_id']}">
 <h3 class="h3">{c3['anza_title']}</h3>
 <p>{c3['anza_text']}</p>
+{more(c3, lang, key="more_anza")}
 </div>
 <aside class="noon__facts" aria-labelledby="t3f">
 <h3 class="kicker" id="t3f">{c3['facts_title']}</h3>
@@ -451,7 +605,8 @@ def page_home(c, lang):
 </div>
 </section>"""
 
-    qs = "".join(quote_block(t, by, src, f"q--set q--s{i + 1}") for i, (t, by, src) in enumerate(c4["quotes"]))
+    qs = "".join(quote_block(q[0], q[1], q[2], f"q--set q--s{i + 1}", q[3] if len(q) > 3 else None, lang)
+                 for i, q in enumerate(c4["quotes"]))
     ch4 = f"""<section class="ch ch--sea" id="{c4['id']}" aria-labelledby="t4">
 <div class="wrap">
 {marker(c4, 3)}
@@ -461,6 +616,7 @@ def page_home(c, lang):
 <p class="lead">{c4['lead']}</p>
 <h3 class="h3">{c4['fam_title']}</h3>
 <p>{c4['fam_text']}</p>
+{more(c4, lang, "more--light")}
 </div>
 <div class="stat">
 <p class="stat__n">{c4['stat']}</p>
@@ -480,6 +636,7 @@ def page_home(c, lang):
 <div class="ch5__text">
 <h2 class="h2" id="t5">{c5['title']}</h2>
 <p class="lead">{c5['lead']}</p>
+{more(c5, lang, "more--light")}
 </div>
 <div class="roof" aria-hidden="true" data-reveal>
 <p class="roof__word">{c5['roof_word']}</p>
@@ -492,7 +649,7 @@ def page_home(c, lang):
 </div>
 </section>"""
 
-    asks = f"""<section class="ch ch--sun" id="{ask['id']}" aria-labelledby="t6">
+    asks = f"""<section class="ch ch--sun" id="{ask['id']}" aria-labelledby="t6" data-nodock>
 <div class="wrap askw">
 <div class="askw__head">
 <h2 class="h2" id="t6">{ask['title']}</h2>
@@ -523,8 +680,303 @@ def page_home(c, lang):
     return head(c, "home", lang, ld_hostel(c)) + "\n" + body
 
 
-def page_404(c, lang):
+def fig(name, alt, cap, sizes, cls=""):
+    return f'<figure class="{cls}">{img(name, alt, sizes)}<figcaption>{cap}</figcaption></figure>'
+
+
+def page_rooms(c, lang):
+    R = c.ROOMS
+    arts = []
+    for i, r in enumerate(R["types"]):
+        figs = "".join(
+            fig(n, alt, cap, "(min-width: 960px) 26vw, 46vw", f"rt__f rt__f--{j + 1}") for j, (n, alt, cap) in enumerate(r["imgs"])
+        )
+        plaques = "".join(f'<span class="plaque">{p}</span>' for p in r.get("plaques", []))
+        arts.append(f"""<article class="rt{' rt--flip' if i % 2 else ''}" id="{r['id']}" aria-labelledby="rt-{r['id']}">
+<div class="wrap">
+{marker({'n': f'0{i + 1}', 'label': r['kind']}, t=.3 + i * .1)}
+<div class="rt__grid">
+<div class="rt__text">
+<h2 class="rt__name" id="rt-{r['id']}">{r['name']}&nbsp;<span class="rt__count">{r['count']}</span></h2>
+<p class="rt__blurb">{r['blurb']}</p>
+{specs(r['specs'], 'specs--ink')}
+{f'<p class="room__plaques">{plaques}</p>' if plaques else ''}
+<p class="more"><a href="{book_href(lang, room=r['room'])}">{R['ask_room']}<span aria-hidden="true"> →</span></a></p>
+</div>
+<div class="rt__set">{figs}</div>
+</div>
+</div>
+</article>""")
+    E = R["every"]
+    has = "".join(f"<li>{x}</li>" for x in E["has"])
+    hasnt = "".join(f"<li>{x}</li>" for x in E["not"])
+    plaques = "".join(f'<span class="plaque plaque--big">{p}</span>' for p in E["plaques"])
+    every = f"""<section class="ch ch--dawn" aria-labelledby="t-every">
+<div class="wrap">
+{marker({'label': E['label']}, t=.75)}
+<h2 class="h2" id="t-every">{E['title']}</h2>
+<div class="every">
+<div><h3 class="kicker">{E['has_title']}</h3><ul class="lines">{has}</ul></div>
+<div><h3 class="kicker">{E['not_title']}</h3><ul class="lines lines--not">{hasnt}</ul></div>
+<div class="every__doors"><h3 class="h3">{E['doors_title']}</h3><p>{E['doors_text']}</p><p class="room__plaques">{plaques}</p></div>
+</div>
+<div class="every__arrive">
+<h3 class="h3">{E['arrive_title']}</h3>
+{specs(E['arrive'], 'specs--ink specs--wide')}
+</div>
+{quotes([R['quote']], lang, 'q--rule')}
+</div>
+</section>"""
+    main = masthead(c, lang, R["mast"]) + "\n" + "\n".join(arts) + "\n" + every + "\n" + ask_band(c, lang, R["cta_title"])
+    return page(c, "rooms", lang, main)
+
+
+def page_surf(c, lang):
+    S = c.SURF
+    L, Rn, W = S["lessons"], S["rental"], S["water"]
+    sets = "".join(
+        fig(n, alt, cap, "(min-width: 960px) 30vw, 80vw", f"set__f set__f--{i + 1}") for i, (n, alt, cap) in enumerate(Rn["set"])
+    )
+    main = f"""{masthead(c, lang, S['mast'])}
+<section class="ch ch--noon" id="lessons" aria-labelledby="t-les">
+<div class="wrap">
+{marker({'label': L['label']}, t=.2)}
+<div class="split">
+<div class="split__a">
+<h2 class="h2" id="t-les">{L['title']}</h2>
+<p class="lead">{L['lead']}</p>
+{specs(L['specs'], 'specs--ink')}
+</div>
+<div class="split__b">
+<p class="who who--ink">{L['who']}</p>
+{quotes(L['quotes'], lang, 'q--rule')}
+</div>
+</div>
+</div>
+</section>
+<section class="ch ch--sky" id="rental" aria-labelledby="t-rent">
+<div class="wrap">
+{marker({'label': Rn['label']}, t=.4)}
+<div class="split">
+<div class="split__a">
+<h2 class="h2" id="t-rent">{Rn['title']}</h2>
+<p class="lead">{Rn['lead']}</p>
+<p>{Rn['text']}</p>
+</div>
+<div class="split__b">{quotes(Rn['quotes'], lang, 'q--light')}</div>
+</div>
+</div>
+<div class="set" role="group" aria-label="{Rn['set_label']}">{sets}</div>
+</section>
+<section class="ch ch--dawn" id="water" aria-labelledby="t-wat">
+<div class="wrap">
+{marker({'label': W['label']}, t=.6)}
+<div class="split split--fig">
+<div class="split__a">
+<h2 class="h2" id="t-wat">{W['title']}</h2>
+<p class="lead">{W['lead']}</p>
+<p>{W['text']}</p>
+{quotes(W['quotes'], lang, 'q--rule')}
+</div>
+{fig(W['img'], W['img_alt'], W['caption'], '(min-width: 960px) 38vw, 100vw', 'split__b split__fig')}
+</div>
+</div>
+</section>
+{ask_band(c, lang, S['cta_title'], extra='lessons')}"""
+    return page(c, "surf", lang, main)
+
+
+def page_house(c, lang):
+    H = c.HOUSE
+    B, F, K, R, Q, X = H["breakfast"], H["family"], H["cooking"], H["roof"], H["scores"], H["rules"]
+    bf_items = "\n".join(f"<li>{x}</li>" for x in B["items"])  # newline = break opportunity between nowrap items
+    asks = "".join(f"<li>{x}</li>" for x in F["ask_items"])
+    roof_lines = "".join(f"<li>{x}</li>" for x in R["lines"])
+    scores = "".join(f'<div class="score"><p class="score__n">{n}</p><p class="score__l">{l}</p></div>' for n, l in Q["items"])
+    qs = "".join(quote_block(q[0], q[1], q[2], f"q--set q--s{i + 1}", q[3] if len(q) > 3 else None, lang)
+                 for i, q in enumerate(Q["quotes"]))
+    main = f"""{masthead(c, lang, H['mast'])}
+<section class="ch ch--dawn" id="breakfast" aria-labelledby="t-bf">
+<div class="wrap">
+{marker({'label': B['label']}, t=0)}
+<div class="split">
+<div class="split__a">
+<h2 class="h2" id="t-bf">{B['title']}</h2>
+<p class="lead">{B['lead']}</p>
+<p class="maybe__label">{B['maybe']}</p>
+<ul class="maybe">{bf_items}</ul>
+<p class="small">{B['note']}</p>
+</div>
+<div class="split__b">{quotes(B['quotes'], lang, 'q--rule')}</div>
+</div>
+</div>
+</section>
+<section class="ch ch--noon" id="family" aria-labelledby="t-fam">
+<div class="wrap">
+{marker({'label': F['label']}, t=.3)}
+<h2 class="h2 h2--wide" id="t-fam">{F['title']}</h2>
+<div class="split">
+<div class="split__a">
+<p class="lead">{F['lead']}</p>
+<p class="who who--ink">{F['said']}</p>
+<p class="who who--ink">{F['zohair']}</p>
+</div>
+<div class="split__b panel">
+<h3 class="kicker">{F['ask_title']}</h3>
+<ul class="lines">{asks}</ul>
+<p class="small">{F['ask_note']}</p>
+</div>
+</div>
+</div>
+</section>
+<section class="ch ch--sand" id="food" aria-labelledby="t-food">
+<div class="wrap">
+{marker({'label': K['label']}, t=.7)}
+<div class="split">
+<div class="split__a">
+<h2 class="h2" id="t-food">{K['title']}</h2>
+<p class="lead">{K['lead']}</p>
+<p>{K['text']}</p>
+</div>
+<div class="split__b">{quotes(K['quotes'], lang, 'q--rule')}</div>
+</div>
+</div>
+</section>
+<section class="ch ch--dusk" id="roof" aria-labelledby="t-roof">
+<div class="wrap">
+{marker({'label': R['label']}, t=1)}
+<div class="ch5">
+<div class="ch5__text">
+<h2 class="h2" id="t-roof">{R['title']}</h2>
+<p class="lead">{R['lead']}</p>
+{quotes(R['quotes'], lang, 'q--dusk')}
+</div>
+<div class="roof" aria-hidden="true" data-reveal>
+<p class="roof__word">{R['word']}</p>
+<span class="roof__sun"></span>
+<span class="roof__line"></span>
+<ul class="roof__lines">{roof_lines}</ul>
+</div>
+</div>
+</div>
+</section>
+<section class="ch ch--sea" id="reviews" aria-labelledby="t-rev">
+<div class="wrap">
+<h2 class="h2" id="t-rev">{Q['title']}</h2>
+<div class="scores">{scores}</div>
+<p class="stat__note">{Q['note']}</p>
+<div class="qset">{qs}</div>
+</div>
+</section>
+<section class="ch ch--noon ch--tight" id="rules" aria-labelledby="t-rules">
+<div class="wrap split">
+<div class="split__a"><h2 class="h3 h3--big" id="t-rules">{X['title']}</h2><p>{X['text']}</p></div>
+<div class="split__b">{specs(X['items'], 'specs--ink')}</div>
+</div>
+</section>
+{ask_band(c, lang, H['cta_title'])}"""
+    return page(c, "house", lang, main)
+
+
+def page_anza(c, lang):
+    A = c.ANZA
+    O, W, G = A["front"], A["wander"], A["around"]
+    xs = "".join(
+        f'<li class="xs__i xs__i--{k}"><span class="xs__shape" aria-hidden="true"></span><b>{t}</b><span>{s}</span></li>'
+        for k, t, s in O["xs"]
+    )
+    main = f"""{masthead(c, lang, A['mast'])}
+<section class="ch ch--noon" id="front" aria-labelledby="t-front">
+<div class="wrap">
+{marker({'label': O['label']}, t=.55)}
+<h2 class="h2 h2--wide" id="t-front">{O['title']}</h2>
+<ol class="xs" aria-label="{O['xs_label']}">{xs}</ol>
+<div class="split">
+<div class="split__a"><p class="lead">{O['lead']}</p></div>
+<div class="split__b">{quotes(O['quotes'], lang, 'q--rule')}</div>
+</div>
+</div>
+</section>
+<section class="ch ch--sand" id="wander" aria-labelledby="t-wan">
+<div class="wrap">
+{marker({'label': W['label']}, t=.65)}
+<div class="split">
+<div class="split__a">
+<h2 class="h2" id="t-wan">{W['title']}</h2>
+<p class="lead">{W['lead']}</p>
+<p>{W['text']}</p>
+</div>
+<div class="split__b">
+<h3 class="h3">{W['fp_title']}</h3>
+<p>{W['fp_text']}</p>
+{quotes(W['quotes'], lang, 'q--rule')}
+</div>
+</div>
+</div>
+</section>
+<section class="ch ch--dawn" id="around" aria-labelledby="t-around">
+<div class="wrap">
+{marker({'label': G['label']}, t=.8)}
+<div class="split">
+<div class="split__a">
+<h2 class="h2" id="t-around">{G['title']}</h2>
+{specs(G['specs'], 'specs--ink')}
+</div>
+<div class="split__b">
+<p class="who who--ink">{G['who']}</p>
+<h3 class="h3">{G['trips_title']}</h3>
+<p>{G['trips_text']}</p>
+<div class="findus">
+<h3 class="kicker">{G['find_title']}</h3>
+<address>Line Up Surf House<br>{ADDRESS[0]}<br>{ADDRESS[1]}</address>
+<a class="btn btn--line" href="{MAPS}" rel="noopener" target="_blank">{c.FOOTER['maps']} <svg class="ic ic--s"><use href="#i-out"/></svg></a>
+</div>
+</div>
+</div>
+</div>
+</section>
+{ask_band(c, lang, A['cta_title'])}"""
+    return page(c, "anza", lang, main)
+
+
+def page_book(c, lang):
+    B, ui = c.BOOK, c.UI
+    steps = "".join(f"<li>{x}</li>" for x in B["steps"])
+    main = f"""{masthead(c, lang, B['mast'])}
+<section class="ch ch--sun book" id="ask" aria-label="{B['form_label']}" data-nodock>
+<div class="wrap book__in">
+<div class="book__form">{ask_form(c, lang)}{quotes([B['quote']], lang, 'q--rule book__q')}</div>
+<aside class="book__aside" aria-labelledby="t-how">
+<h2 class="kicker" id="t-how">{B['how_title']}</h2>
+<ol class="steps">{steps}</ol>
+<h2 class="kicker">{B['other_title']}</h2>
+<ul class="book__other">
+<li><a href="{wa_link(ui['wa_hello'])}" rel="noopener" target="_blank"><svg class="ic"><use href="#i-wa"/></svg>WhatsApp {PHONE_INTL}</a></li>
+<li><a href="{PHONE_TEL}"><svg class="ic"><use href="#i-phone"/></svg>{ui['cta_call']} {PHONE_INTL}</a></li>
+<li><a href="{BOOKING}" rel="noopener" target="_blank">{ui['cta_booking_long']} <svg class="ic ic--s"><use href="#i-out"/></svg></a></li>
+</ul>
+<h2 class="kicker">{B['know_title']}</h2>
+{specs(B['know'], 'specs--ink')}
+<h2 class="kicker">{B['find_title']}</h2>
+<address>Line Up Surf House<br>{ADDRESS[0]}<br>{ADDRESS[1]}</address>
+<p><a class="book__map" href="{MAPS}" rel="noopener" target="_blank">{c.FOOTER['maps']} <svg class="ic ic--s"><use href="#i-out"/></svg></a></p>
+</aside>
+</div>
+</section>"""
+    return page(c, "book", lang, main)
+
+
+def page_404(c, lang, fr=None):
+    """Self-contained 404 (Cloudflare serves it for any missing path): English first, French below."""
     n = c.NOT_FOUND
+    frb = ""
+    if fr:
+        f = fr.NOT_FOUND
+        frb = f"""<div class="nf__fr" lang="fr">
+<p class="nf__frt">{f['title']}</p>
+<p>{f['text']}</p>
+<p><a class="btn btn--line-light" href="/fr/">{f['back']}</a></p>
+</div>"""
     body = f"""<body class="nf">
 {SVG_SPRITE}
 <main id="main" class="nf__main">
@@ -535,6 +987,7 @@ def page_404(c, lang):
 <p class="lead">{n['text']}</p>
 <p class="nf__acts"><a class="btn btn--sun" href="/">{n['back']}</a>
 <a class="btn btn--line-light" href="{wa_link(c.UI['wa_hello'])}" rel="noopener" target="_blank"><svg class="ic"><use href="#i-wa"/></svg>{c.UI['cta_whatsapp_long']}</a></p>
+{frb}
 </div>
 </main>
 </body>
@@ -543,8 +996,28 @@ def page_404(c, lang):
 
 
 RENDER = {
-    ("home", "en"): page_home,
+    (key, lang): fn
+    for key, fn in (("home", page_home), ("rooms", page_rooms), ("surf", page_surf), ("house", page_house),
+                    ("anza", page_anza), ("book", page_book))
+    for lang in ("en", "fr")
 }
+
+HEADERS = """/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: DENY
+  Strict-Transport-Security: max-age=31536000
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
+"""
+
+
+def fr_typo(s):
+    """French spacing: no line break before : ; ! ? » or after « (URLs are percent-encoded, so untouched)."""
+    import re
+    return re.sub(r" ([:;!?»])", "\u00a0\\1", s).replace("« ", "«\u00a0")
 
 
 def out_path(key, lang):
@@ -565,18 +1038,24 @@ def main():
         c = contents.get(lang)
         if not c:
             continue
-        write(out_path(key, lang), fn(c, lang))
+        out = fn(c, lang)
+        write(out_path(key, lang), fr_typo(out) if lang == "fr" else out)
         print("built", PAGES[key][lang])
-    write(os.path.join(SITE, "404.html"), page_404(contents["en"], "en"))
+    write(os.path.join(SITE, "404.html"), page_404(contents["en"], "en", contents.get("fr")))
     print("built /404.html")
-    urls = sorted(PAGES[k][l] for k, l in BUILT)
-    sm = "".join(f"<url><loc>{ORIGIN}{u}</loc></url>" for u in urls)
+    sm = []
+    for key in PAGES:
+        langs = [l for l in ("en", "fr") if (key, l) in BUILT]
+        alts = ""
+        if len(langs) == 2:
+            alts = "".join(f'<xhtml:link rel="alternate" hreflang="{l}" href="{ORIGIN}{PAGES[key][l]}"/>' for l in langs)
+            alts += f'<xhtml:link rel="alternate" hreflang="x-default" href="{ORIGIN}{PAGES[key]["en"]}"/>'
+        sm += [f"<url><loc>{ORIGIN}{PAGES[key][l]}</loc>{alts}</url>" for l in langs]
     write(os.path.join(SITE, "sitemap.xml"),
-          f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{sm}</urlset>\n')
+          '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" '
+          'xmlns:xhtml="http://www.w3.org/1999/xhtml">\n' + "\n".join(sm) + "\n</urlset>\n")
     write(os.path.join(SITE, "robots.txt"), f"User-agent: *\nAllow: /\nSitemap: {ORIGIN}/sitemap.xml\n")
-    write(os.path.join(SITE, "_headers"),
-          "/assets/*\n  Cache-Control: public, max-age=31536000, immutable\n"
-          "/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n")
+    write(os.path.join(SITE, "_headers"), HEADERS)
     print("built sitemap.xml robots.txt _headers")
 
 

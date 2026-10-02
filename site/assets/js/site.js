@@ -48,29 +48,29 @@
   }
   window.addEventListener("resize", function () { if (window.innerWidth >= 960) closeSheet(false); });
 
-  /* ---------- header + dock state */
+  /* ---------- header + dock state
+     The dock hides over the cover/masthead and over every [data-nodock] zone (ask bands, the
+     booking form) and the footer, so it never covers a submit button or footer content. */
   var hd = d.querySelector("[data-header]");
   var dock = d.querySelector("[data-dock]");
   var cover = d.querySelector("[data-cover]");
-  var ask = d.getElementById("ask");
-  var foot = d.querySelector("[data-footer]");
   if ("IntersectionObserver" in window) {
-    var state = { cover: true, ask: false, foot: false };
+    var state = { cover: !!cover };
     var sync = function () {
+      var blocked = false;
+      for (var k in state) if (k !== "cover" && state[k]) blocked = true;
       if (hd) hd.classList.toggle("is-past", !state.cover);
-      if (dock) dock.classList.toggle("is-on", !state.cover && !state.ask && !state.foot);
+      if (dock) dock.classList.toggle("is-on", !state.cover && !blocked);
     };
     var watch = function (el, key, opts) {
-      if (!el) return;
+      state[key] = key === "cover";
       new IntersectionObserver(function (es) {
         es.forEach(function (en) { state[key] = en.isIntersecting; });
         sync();
       }, opts).observe(el);
     };
     if (cover) watch(cover, "cover", { rootMargin: "-72px 0px 0px 0px" });
-    else state.cover = false;
-    watch(ask, "ask", { threshold: 0.15 });
-    watch(foot, "foot", {});
+    d.querySelectorAll("[data-nodock],[data-footer]").forEach(function (el, i) { watch(el, "z" + i, {}); });
     sync();
 
     /* ---------- reveals (content is visible without JS; only the sun + lines move) */
@@ -93,18 +93,38 @@
   var fin = form.elements.checkin, fout = form.elements.checkout;
 
   function iso(dt) { return dt.getFullYear() + "-" + String(dt.getMonth() + 1).padStart(2, "0") + "-" + String(dt.getDate()).padStart(2, "0"); }
-  function parse(v) { var p = v.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  /* yyyy-mm-dd from a date input; dd/mm/yyyy if the browser fell back to a text field. null if invalid. */
+  function parse(v) {
+    var m = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(v.trim()), y, mo, da;
+    if (m) { y = +m[1]; mo = +m[2]; da = +m[3]; }
+    else if ((m = /^(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{4})$/.exec(v.trim()))) { y = +m[3]; mo = +m[2]; da = +m[1]; }
+    else return null;
+    var dt = new Date(y, mo - 1, da);
+    return dt.getFullYear() === y && dt.getMonth() === mo - 1 && dt.getDate() === da ? dt : null;
+  }
+  function addDays(dt, n) { var x = new Date(dt.getTime()); x.setDate(x.getDate() + n); return x; }
   var today = new Date(); today.setHours(0, 0, 0, 0);
   fin.min = iso(today);
-  fout.min = iso(new Date(today.getTime() + 864e5));
+  fout.min = iso(addDays(today, 1));
   fin.addEventListener("change", function () {
-    if (!fin.value) return;
-    var next = new Date(parse(fin.value).getTime() + 864e5);
+    var a = parse(fin.value);
+    if (!a) return;
+    var next = addDays(a, 1), b = parse(fout.value);
     fout.min = iso(next);
-    if (!fout.value || parse(fout.value) <= parse(fin.value)) fout.value = iso(next);
+    if (!b || b <= a) fout.value = iso(next);
     clearErr(fin); clearErr(fout);
   });
   fout.addEventListener("change", function () { clearErr(fout); });
+
+  /* prefill from links such as /book/?room=seaview&extra=lessons */
+  try {
+    var qs = new URLSearchParams(location.search), room = qs.get("room");
+    if (room && form.elements.room.querySelector('option[value="' + room.replace(/[^a-z]/g, "") + '"]')) form.elements.room.value = room;
+    qs.getAll("extra").forEach(function (x) {
+      var box = form.querySelector('input[name=extras][value="' + x.replace(/[^a-z]/g, "") + '"]');
+      if (box) box.checked = true;
+    });
+  } catch (e) { /* old browser: no prefill */ }
 
   function errEl(input) { return d.getElementById(input.getAttribute("aria-describedby")); }
   function setErr(input, msg) { input.setAttribute("aria-invalid", "true"); var e = errEl(input); e.textContent = msg; e.hidden = false; }
@@ -117,23 +137,23 @@
   function plural(n, one, many) { return n + " " + (n === 1 ? one : many); }
 
   function compose() {
-    var M = T.msg, el = form.elements, lines = [M.hello, ""];
+    var M = T.msg, el = form.elements, lines = [M.hello, ""], s = M.sep || ": ";
     var a = parse(fin.value), b = parse(fout.value);
-    var nights = Math.round((b - a) / 864e5);
-    lines.push("• " + M.checkin + ": " + fmt(a));
-    lines.push("• " + M.checkout + ": " + fmt(b) + " (" + plural(nights, M.nights_one, M.nights_many) + ")");
+    var nights = Math.round((Date.UTC(b.getFullYear(), b.getMonth(), b.getDate()) - Date.UTC(a.getFullYear(), a.getMonth(), a.getDate())) / 864e5);
+    lines.push("• " + M.checkin + s + fmt(a));
+    lines.push("• " + M.checkout + s + fmt(b) + " (" + plural(nights, M.nights_one, M.nights_many) + ")");
     var ad = parseInt(el.adults.value, 10) || 1, ch = parseInt(el.children.value, 10) || 0;
     var g = plural(ad, M.adult_one, M.adult_many);
     if (ch > 0) g += ", " + plural(ch, M.child_one, M.child_many);
-    lines.push("• " + M.guests + ": " + g);
-    if (el.room.value) lines.push("• " + M.room + ": " + el.room.options[el.room.selectedIndex].text);
+    lines.push("• " + M.guests + s + g);
+    if (el.room.value) lines.push("• " + M.room + s + el.room.options[el.room.selectedIndex].text);
     var ex = [];
     form.querySelectorAll("input[name=extras]:checked").forEach(function (c) { ex.push(c.getAttribute("data-label").toLowerCase()); });
-    if (ex.length) lines.push("• " + M.extras + ": " + ex.join(", "));
+    if (ex.length) lines.push("• " + M.extras + s + ex.join(", "));
     var note = el.note.value.trim();
-    if (note) lines.push("• " + M.note + ": " + note);
+    if (note) lines.push("• " + M.note + s + note);
     var name = el.name.value.trim();
-    if (name) lines.push("", M.name + ": " + name);
+    if (name) lines.push("", M.name + s + name);
     lines.push("", M.sent_from);
     return lines.join("\n");
   }
@@ -142,10 +162,11 @@
     e.preventDefault();
     var bad = [];
     clearErr(fin); clearErr(fout);
-    if (!fin.value) { setErr(fin, T.errors.checkin); bad.push(fin); }
-    else if (parse(fin.value) < today) { setErr(fin, T.errors.checkin_past); bad.push(fin); }
-    if (!fout.value) { setErr(fout, T.errors.checkout); bad.push(fout); }
-    else if (fin.value && parse(fout.value) <= parse(fin.value)) { setErr(fout, T.errors.order); bad.push(fout); }
+    var a = parse(fin.value), b = parse(fout.value);
+    if (!a) { setErr(fin, T.errors.checkin); bad.push(fin); }
+    else if (a < today) { setErr(fin, T.errors.checkin_past); bad.push(fin); }
+    if (!b) { setErr(fout, T.errors.checkout); bad.push(fout); }
+    else if (a && b <= a) { setErr(fout, T.errors.order); bad.push(fout); }
     if (bad.length) {
       summary.textContent = T.errors.summary; summary.hidden = false;
       bad[0].focus();

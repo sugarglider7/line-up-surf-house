@@ -12,8 +12,10 @@ SPEC fields
   widths   output widths (never upscaled beyond the crop width)
   q        WebP quality
   treat    optional: "duotone" (ink → haze, used for the sunset band)
-  horizon  True → detect the sea horizon row inside the crop and store it as a fraction
+  horizon  True → detect the sea horizon row inside the crop and store it as a fraction;
+           a float → measured by eye (use when the beach edge fools the detector)
   fmt      optional: "jpg" (Open Graph image)
+  rotate   optional degrees (PIL sign: negative = clockwise) applied before the crop, to level a tilted horizon
 """
 import json
 import os
@@ -50,6 +52,21 @@ SPEC = [
     dict(name="late-light", src="hires/bk-17-dt-seaview-B-694632909-2048.jpg", crop=(110, 430, 900, 1010), widths=[640, 790], q=74, treat="duotone"),
     # Open Graph: the LINE UP mural (accommodation · Surf School · Shop)
     dict(name="og", src="gm-owner-06.jpg", crop=(0, 360, 1200, 990), widths=[1200], q=82, fmt="jpg"),
+    # Phase 3 inner pages
+    # Rooms masthead: black window frame around the beach and sea, from a sea-view room
+    dict(name="view-window", src="hires/bk-32-dt-seaview-A-635804469-2048.jpg", crop=(0, 64, 1536, 1984), widths=[640, 1000], q=74),
+    # Room sets (second photo per type)
+    dict(name="room-seaview-dbl", src="bk-13-dt-seaview-B-694632891.jpg", crop=(0, 56, 675, 900), widths=[480, 675], q=74),
+    dict(name="room-triple-3", src="hires/bk-29-triple-seaview-635808047-2048.jpg", crop=(0, 64, 1536, 1984), widths=[480, 800], q=72),
+    dict(name="room-private-twin", src="bk-06-dt-privbath-B-635800861.jpg", crop=(0, 56, 675, 900), widths=[480, 675], q=74),
+    dict(name="reef-plaque", src="hires/bk-26-dt-B-640505626-2048.jpg", crop=(0, 64, 1536, 1984), widths=[480, 800], q=72),
+    # The house masthead: the LINE UP mural
+    dict(name="mural", src="gm-owner-06.jpg", crop=(0, 100, 1200, 1600), widths=[640, 1000], q=74),
+    # Surf masthead: inside the shop, racks of yellow boards
+    dict(name="shop-inside", src="gm-owner-04.jpg", crop=(0, 100, 1200, 1600), widths=[640, 1000], q=74),
+    # Anza band: the beach, the car park and the surf from upstairs. The phone was tilted ~2.7° (horizon y 1316 at
+    # x 270 → 1270 at x 1250), so level it first; the levelled horizon sits at source row ≈1293 → 0.45 of the crop.
+    dict(name="anza-view", src="hires/bk-45-dt-seaview-A-635804459-2048.jpg", rotate=-2.69, crop=(150, 906, 1440, 1766), widths=[800, 1200, 1290], q=76, horizon=0.45),
 ]
 
 
@@ -113,6 +130,8 @@ def main():
             continue
         with Image.open(os.path.join(RAW, spec["src"])) as src:
             src = ImageOps.exif_transpose(src).convert("RGB")
+            if spec.get("rotate"):
+                src = src.rotate(spec["rotate"], resample=Image.BICUBIC)
             im = src.crop(spec["crop"]) if spec.get("crop") else src.copy()
         if spec.get("treat") == "duotone":
             gray = ImageOps.autocontrast(im.convert("L"), cutoff=1)
@@ -120,8 +139,10 @@ def main():
         entry = {
             "w": im.width, "h": im.height, "color": dominant(im), "variants": [],
         }
-        if spec.get("horizon"):
+        if spec.get("horizon") is True:
             entry["horizon"] = find_horizon(im)
+        elif spec.get("horizon"):
+            entry["horizon"] = spec["horizon"]
         ext = spec.get("fmt", "webp")
         for w in spec["widths"]:
             w = min(w, im.width)
