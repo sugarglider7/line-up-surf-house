@@ -11,7 +11,7 @@ SPEC fields
   crop     (x0, y0, x1, y1) in source pixels, or None for the full frame
   widths   output widths (never upscaled beyond the crop width)
   q        WebP quality
-  treat    optional: "duotone" (ink → haze, used for the sunset band)
+  treat    optional: "late" (natural colour, small contrast lift and a slight warm balance — the sunset photo; no toning)
   horizon  True → detect the sea horizon row inside the crop and store it as a fraction;
            a float → measured by eye (use when the beach edge fools the detector)
   fmt      optional: "jpg" (Open Graph image)
@@ -21,7 +21,7 @@ import json
 import os
 import sys
 
-from PIL import Image, ImageFilter, ImageOps
+from PIL import Image, ImageEnhance, ImageFilter, ImageOps
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RAW = os.path.join(REPO, "research", "raw", "images")
@@ -35,7 +35,7 @@ HAZE = (240, 222, 190)  # --haze #f0debe
 SPEC = [
     # Cover: the view from upstairs over the beach car park to Anza's surf (Booking, property upload)
     dict(name="hero-m", src="hires/bk-03-dt-seaview-A-635804457-2048.jpg", crop=(150, 180, 1350, 1680), widths=[640, 900], q=80, horizon=True),
-    dict(name="hero-d", src="hires/bk-03-dt-seaview-A-635804457-2048.jpg", crop=(140, 700, 1536, 1485), widths=[1000, 1396], q=80, horizon=True),
+    dict(name="hero-d", src="hires/bk-03-dt-seaview-A-635804457-2048.jpg", crop=(125, 668, 1536, 1462), widths=[1000, 1411], q=88, horizon=True),
     # 01 First light: sea-view room window framing beach and sea
     dict(name="window", src="hires/bk-47-dt-seaview-A-635804467-2048.jpg", crop=(40, 0, 1536, 1870), widths=[640, 1000], q=74),
     # 02 First session: shop front + banner, boards against the mural, wetsuit rail, logo board nose
@@ -48,13 +48,23 @@ SPEC = [
     dict(name="room-triple", src="hires/bk-46-triple-seaview-635808077-2048.jpg", crop=(0, 100, 1536, 1990), widths=[480, 800], q=72),
     dict(name="room-private", src="hires/bk-55-dt-privbath-A-635809335-2048.jpg", crop=(0, 160, 1536, 2048), widths=[480, 800], q=72),
     dict(name="room-compact", src="hires/bk-80-dt-A-640506966-2048.jpg", crop=(0, 60, 1536, 1950), widths=[480, 800], q=72),
-    # 05 Sunset: hazy late light over the beach from a sea-view room, duotone
-    dict(name="late-light", src="hires/bk-17-dt-seaview-B-694632909-2048.jpg", crop=(110, 430, 900, 1010), widths=[640, 790], q=74, treat="duotone"),
+    # 05 Sunset: low sun in the haze over the sea from a sea-view room, natural colour (the day's last photo)
+    dict(name="late-light", src="hires/bk-17-dt-seaview-B-694632909-2048.jpg", crop=(120, 450, 900, 1060), widths=[640, 780], q=78, treat="late"),
     # Open Graph: the LINE UP mural (accommodation · Surf School · Shop)
     dict(name="og", src="gm-owner-06.jpg", crop=(0, 360, 1200, 990), widths=[1200], q=82, fmt="jpg"),
     # Phase 3 inner pages
-    # Rooms masthead: black window frame around the beach and sea, from a sea-view room
-    dict(name="view-window", src="hires/bk-32-dt-seaview-A-635804469-2048.jpg", crop=(0, 64, 1536, 1984), widths=[640, 1000], q=74),
+    # Phase 4 re-allocation: each page opens on its own subject; the upstairs view is not repeated.
+    # Rooms masthead = room-triple (bk-46). Surf "Check it from the window": an open pine window, grey day (bk-08)
+    dict(name="window-open", src="hires/bk-08-triple-seaview-B-694633028-2048.jpg", crop=(0, 80, 1200, 1580), widths=[640, 1000], q=74),
+    # Rooms — triple set: the window end of a single bed (bk-59, R5)
+    dict(name="room-triple-window", src="bk-59-triple-seaview-635808073.jpg", crop=(0, 56, 675, 900), widths=[480, 675], q=74),
+    # The house — roof section: low evening sun through an open sea-view window (bk-14); LED reflections cropped out
+    dict(name="evening-window", src="hires/bk-14-dt-seaview-B-694632895-2048.jpg", crop=(420, 460, 1200, 1435), widths=[640, 780], q=76),
+    # The house — rules pair: LINE UP towel on a sea-view twin (bk-34), "Reef room" door plaque (bk-27)
+    dict(name="towel", src="bk-34-dt-seaview-A-635804460.jpg", crop=(60, 280, 540, 880), widths=[480], q=76),
+    dict(name="reef-door", src="bk-27-dt-B-640505634.jpg", crop=(0, 56, 675, 900), widths=[480, 675], q=74),
+    # Anza — "Out the front door": outside the shop door, the street towards the beach parasols (gm-owner-01, right side)
+    dict(name="street", src="gm-owner-01.jpg", crop=(560, 400, 1200, 1200), widths=[640], q=76),
     # Room sets (second photo per type)
     dict(name="room-seaview-dbl", src="bk-13-dt-seaview-B-694632891.jpg", crop=(0, 56, 675, 900), widths=[480, 675], q=74),
     dict(name="room-triple-3", src="hires/bk-29-triple-seaview-635808047-2048.jpg", crop=(0, 64, 1536, 1984), widths=[480, 800], q=72),
@@ -133,9 +143,9 @@ def main():
             if spec.get("rotate"):
                 src = src.rotate(spec["rotate"], resample=Image.BICUBIC)
             im = src.crop(spec["crop"]) if spec.get("crop") else src.copy()
-        if spec.get("treat") == "duotone":
-            gray = ImageOps.autocontrast(im.convert("L"), cutoff=1)
-            im = ImageOps.colorize(gray, black=INK, white=HAZE, mid=(110, 118, 128))  # slate mids, haze highlights
+        if spec.get("treat") == "late":
+            r, g, b = ImageEnhance.Contrast(im).enhance(1.06).split()
+            im = Image.merge("RGB", (r.point(lambda v: min(255, round(v * 1.04))), g, b.point(lambda v: round(v * .94))))
         entry = {
             "w": im.width, "h": im.height, "color": dominant(im), "variants": [],
         }

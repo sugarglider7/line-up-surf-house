@@ -25,7 +25,7 @@ PHONE_TEL = "tel:+212641236758"
 WA = "https://wa.me/212641236758"
 BOOKING = "https://www.booking.com/hotel/ma/line-up-surf-house.html"
 MAPS = "https://www.google.com/maps/place/?q=place_id:ChIJnd03JgCzsw0Ryl0nJC4wElE"
-ADDRESS = ("NR 33 Projet Social Anza", "80090 Agadir, Morocco")
+STREET = "NR 33 Projet Social Anza"  # second address line ("80090 Agadir, Morocco/Maroc") is per language: FOOTER['address2']
 
 # page key -> URL per language. Fallback anchor (on the homepage) while the page is not built.
 PAGES = {
@@ -230,7 +230,7 @@ def footer(c, key, lang):
 </div>
 <div>
 <h2 class="ft__h">{f['address_label']}</h2>
-<address>Line Up Surf House<br>{ADDRESS[0]}<br>{ADDRESS[1]}</address>
+<address>Line Up Surf House<br>{STREET}<br>{f['address2']}</address>
 <a class="ft__link" href="{MAPS}" rel="noopener" target="_blank">{f['maps']} <svg class="ic ic--s"><use href="#i-out"/></svg></a>
 </div>
 <div>
@@ -297,6 +297,19 @@ def specs(items, cls=""):
     return f'<dl class="specs {cls}">{rows}</dl>'
 
 
+def photo_set(figs, label, swipe):
+    """A 'set' of three photos growing like waves. On phones it is a snap scroller: focusable for keyboards,
+    with a small swipe cue (hidden ≥960 px, where the set sits in one row)."""
+    return f"""<div class="set" role="group" aria-label="{label}" tabindex="0">{figs}</div>
+<p class="set__cue" aria-hidden="true">{swipe} <span>→</span></p>"""
+
+
+def ask_link(lang, label, cls="", room=None, extra=None):
+    """Small 'ask about …' link into the /book/ form with the room or extra preselected."""
+    return f'<p class="more {cls}"><a href="{book_href(lang, room, extra)}">{label}<span aria-hidden="true"> →</span></a></p>'
+
+
+
 DAY_ORDER = ["house", "surf", "rooms", "anza", "book"]  # inner pages in the order of the day
 
 
@@ -336,7 +349,7 @@ def masthead(c, lang, M, eager_img=True):
 {day_strip(c, M['t'])}
 <div class="mast__grid">
 <div class="mast__text">
-<p class="mast__kicker"><span class="mk__n">{M['hour']}</span> · {M['kicker']}</p>
+<p class="mast__kicker"><span class="mk__n">{M['hour']}</span>&nbsp;· {M['kicker']}</p>
 <h1 id="h1">{M['h1']}</h1>
 <p class="lead mast__lead">{M['lead']}</p>
 </div>
@@ -444,6 +457,7 @@ def ask_form(c, lang):
 <div class="fld"><label for="f-note">{F['note']} <span class="opt">({F['optional']})</span></label><textarea id="f-note" name="note" rows="2" placeholder="{a(F['note_ph'])}"></textarea></div>
 </div>
 <button class="btn btn--ink ask__go" type="submit"><svg class="ic"><use href="#i-wa"/></svg>{F['submit']}</button>
+<noscript><p class="ask__nojs">{F['noscript']}: <a href="{wa_link(c.UI['wa_hello'])}" rel="noopener" target="_blank">WhatsApp</a> · <a href="{PHONE_TEL}">{PHONE_INTL}</a></p></noscript>
 </form>
 <div class="ask__done" hidden data-done tabindex="-1">
 <p class="ask__done-t">{F['done_title']}</p>
@@ -464,7 +478,7 @@ def ld_hostel(c):
                   f"{ORIGIN}/assets/img/{MANIFEST['hero-d']['variants'][-1]['file']}"],
         "description": c.PAGES_META["home"]["description"],
         "telephone": "+212641236758",
-        "address": {"@type": "PostalAddress", "streetAddress": ADDRESS[0], "postalCode": "80090",
+        "address": {"@type": "PostalAddress", "streetAddress": STREET, "postalCode": "80090",
                     "addressLocality": "Agadir", "addressCountry": "MA"},
         "geo": {"@type": "GeoCoordinates", "latitude": 30.44686, "longitude": -9.659849},
         "hasMap": MAPS,
@@ -475,11 +489,8 @@ def ld_hostel(c):
         "numberOfRooms": 8,
         "knowsLanguage": ["ar", "fr", "en"],
         "amenityFeature": [
-            {"@type": "LocationFeatureSpecification", "name": n, "value": True}
-            for n in ("Breakfast included", "Free Wi-Fi", "Free public parking", "Terrace", "Surf school and board rental")
+            {"@type": "LocationFeatureSpecification", "name": n, "value": True} for n in c.AMENITIES
         ],
-        "aggregateRating": {"@type": "AggregateRating", "ratingValue": 9.6, "bestRating": 10, "worstRating": 1,
-                            "reviewCount": 208},
     }
 
 
@@ -556,7 +567,7 @@ def page_home(c, lang):
 </div>
 </div>
 </div>
-<div class="set" role="group" aria-label="{c2['set_label']}">{sets}</div>
+{photo_set(sets, c2['set_label'], ui['swipe'])}
 </section>"""
 
     rows = []
@@ -702,7 +713,7 @@ def page_rooms(c, lang):
 <p class="rt__blurb">{r['blurb']}</p>
 {specs(r['specs'], 'specs--ink')}
 {f'<p class="room__plaques">{plaques}</p>' if plaques else ''}
-<p class="more"><a href="{book_href(lang, room=r['room'])}">{R['ask_room']}<span aria-hidden="true"> →</span></a></p>
+{ask_link(lang, R['ask_room'], room=r['room'])}
 </div>
 <div class="rt__set">{figs}</div>
 </div>
@@ -763,11 +774,12 @@ def page_surf(c, lang):
 <h2 class="h2" id="t-rent">{Rn['title']}</h2>
 <p class="lead">{Rn['lead']}</p>
 <p>{Rn['text']}</p>
+{ask_link(lang, Rn['ask'], 'more--light', extra='rental')}
 </div>
 <div class="split__b">{quotes(Rn['quotes'], lang, 'q--light')}</div>
 </div>
 </div>
-<div class="set" role="group" aria-label="{Rn['set_label']}">{sets}</div>
+{photo_set(sets, Rn['set_label'], c.UI['swipe'])}
 </section>
 <section class="ch ch--dawn" id="water" aria-labelledby="t-wat">
 <div class="wrap">
@@ -816,17 +828,17 @@ def page_house(c, lang):
 <div class="wrap">
 {marker({'label': F['label']}, t=.3)}
 <h2 class="h2 h2--wide" id="t-fam">{F['title']}</h2>
-<div class="split">
+<div class="split split--fig">
 <div class="split__a">
 <p class="lead">{F['lead']}</p>
-<p class="who who--ink">{F['said']}</p>
-<p class="who who--ink">{F['zohair']}</p>
-</div>
-<div class="split__b panel">
+<div class="panel">
 <h3 class="kicker">{F['ask_title']}</h3>
 <ul class="lines">{asks}</ul>
 <p class="small">{F['ask_note']}</p>
+{ask_link(lang, F['ask_taxi'], extra='taxi')}
 </div>
+</div>
+{fig(F['img'][0], F['img'][1], F['img'][2], '(min-width: 960px) 38vw, 100vw', 'split__b split__fig')}
 </div>
 </div>
 </section>
@@ -838,6 +850,7 @@ def page_house(c, lang):
 <h2 class="h2" id="t-food">{K['title']}</h2>
 <p class="lead">{K['lead']}</p>
 <p>{K['text']}</p>
+{ask_link(lang, K['ask'], extra='meals')}
 </div>
 <div class="split__b">{quotes(K['quotes'], lang, 'q--rule')}</div>
 </div>
@@ -858,6 +871,7 @@ def page_house(c, lang):
 <span class="roof__line"></span>
 <ul class="roof__lines">{roof_lines}</ul>
 </div>
+{fig(R['img'][0], R['img'][1], R['img'][2], '(min-width: 960px) 40vw, 100vw', 'ch5__fig')}
 </div>
 </div>
 </section>
@@ -871,7 +885,8 @@ def page_house(c, lang):
 </section>
 <section class="ch ch--noon ch--tight" id="rules" aria-labelledby="t-rules">
 <div class="wrap split">
-<div class="split__a"><h2 class="h3 h3--big" id="t-rules">{X['title']}</h2><p>{X['text']}</p></div>
+<div class="split__a"><h2 class="h3 h3--big" id="t-rules">{X['title']}</h2><p>{X['text']}</p>
+<div class="rt__set rules__set">{''.join(fig(n, alt, cap, '(min-width: 960px) 20vw, 46vw', f'rt__f rt__f--{j + 1}') for j, (n, alt, cap) in enumerate(X['imgs']))}</div></div>
 <div class="split__b">{specs(X['items'], 'specs--ink')}</div>
 </div>
 </section>
@@ -892,9 +907,9 @@ def page_anza(c, lang):
 {marker({'label': O['label']}, t=.55)}
 <h2 class="h2 h2--wide" id="t-front">{O['title']}</h2>
 <ol class="xs" aria-label="{O['xs_label']}">{xs}</ol>
-<div class="split">
-<div class="split__a"><p class="lead">{O['lead']}</p></div>
-<div class="split__b">{quotes(O['quotes'], lang, 'q--rule')}</div>
+<div class="split split--fig">
+<div class="split__a"><p class="lead">{O['lead']}</p>{quotes(O['quotes'], lang, 'q--rule')}</div>
+{fig(O['img'][0], O['img'][1], O['img'][2], '(min-width: 960px) 38vw, 100vw', 'split__b split__fig')}
 </div>
 </div>
 </section>
@@ -922,6 +937,7 @@ def page_anza(c, lang):
 <div class="split__a">
 <h2 class="h2" id="t-around">{G['title']}</h2>
 {specs(G['specs'], 'specs--ink')}
+{ask_link(lang, G['ask_taxi'], extra='taxi')}
 </div>
 <div class="split__b">
 <p class="who who--ink">{G['who']}</p>
@@ -929,7 +945,7 @@ def page_anza(c, lang):
 <p>{G['trips_text']}</p>
 <div class="findus">
 <h3 class="kicker">{G['find_title']}</h3>
-<address>Line Up Surf House<br>{ADDRESS[0]}<br>{ADDRESS[1]}</address>
+<address>Line Up Surf House<br>{STREET}<br>{c.FOOTER['address2']}</address>
 <a class="btn btn--line" href="{MAPS}" rel="noopener" target="_blank">{c.FOOTER['maps']} <svg class="ic ic--s"><use href="#i-out"/></svg></a>
 </div>
 </div>
@@ -959,7 +975,7 @@ def page_book(c, lang):
 <h2 class="kicker">{B['know_title']}</h2>
 {specs(B['know'], 'specs--ink')}
 <h2 class="kicker">{B['find_title']}</h2>
-<address>Line Up Surf House<br>{ADDRESS[0]}<br>{ADDRESS[1]}</address>
+<address>Line Up Surf House<br>{STREET}<br>{c.FOOTER['address2']}</address>
 <p><a class="book__map" href="{MAPS}" rel="noopener" target="_blank">{c.FOOTER['maps']} <svg class="ic ic--s"><use href="#i-out"/></svg></a></p>
 </aside>
 </div>

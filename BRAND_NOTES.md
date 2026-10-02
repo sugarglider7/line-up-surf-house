@@ -12,9 +12,9 @@ Phase 2 design direction. Facts referenced as SoT tags (SOURCE_OF_TRUTH.md). Bui
 The homepage is one day at Line Up, told in five chapters — **01 First light → 02 First session → 03 Midday → 04 Second session → 05 Sunset** — then "Ask for dates".
 - Every chapter opens on a **horizon marker**: a full-width rule with two thinner "swell" lines under it and a yellow sun sitting at that chapter's place in the day (rising half-disc at the left → low → overhead → lower → setting half-disc at the right). Scrolling the page plays the sun's arc. It is storytelling, never a schedule: no clock times, no forecast, no live data.
 - Each chapter's background is that hour's flat colour, taken from their own photos: dawn (pale low sky) → Anza sky blue → noon white/sand → deep sea → night ink → board-yellow for the ask band. Flat bands, no gradients.
-- **The cover sits on the real horizon.** The hero is the actual view from upstairs at Line Up. A hairline is drawn exactly on the photograph's horizon (detected by `tools/images.py`, aligned in CSS with container-query maths, so it holds at every width), labelled "the line-up". The headline and the hero copy stand on that line, like surfers sitting in the line-up.
+- **The cover sits on the real horizon.** The hero is the actual view from upstairs at Line Up. A hairline is drawn exactly on the photograph's horizon (detected by `tools/images.py`, aligned in CSS with container-query maths, so it holds at every width), labelled "the line-up". The headline's baseline and the hero copy stand on that line at every width (CSS `--h1fs` maths: baseline .06em above the hairline), like surfers sitting in the line-up. On desktop the two columns are sized from the centred 1400 px column (`--wrapw`), never from the full-bleed width, so 1440 → 2560 keep the same layout.
 - **"Sets":** images and quotes come in sets of three that grow in size (wave 1, 2, 3): the shop photo set in chapter 02, the review set in chapter 04.
-- **The rooftop without a photo:** no rooftop photo exists, so the roof is a typographic panel — "THE ROOF" set horizon-wide, a yellow sun setting on a haze line over thin swell lines — next to a real (toned) window photo of late light over Anza, captioned honestly. No fake imagery.
+- **The rooftop without a photo:** no rooftop photo exists, so the roof is a typographic panel — "THE ROOF" set horizon-wide, a yellow sun setting on a haze line over thin swell lines — next to a real natural-colour window photo of the low sun in the haze over Anza, captioned honestly. No fake imagery.
 - **The line-up glyph** (sun on a horizon over two swell lines) is the favicon, the menu-sheet divider, the footer top edge and the 404.
 
 ## 3. Palette (sampled with Pillow from the business's own photos)
@@ -28,7 +28,7 @@ The homepage is one day at Line Up, told in five chapters — **01 First light �
 | `--board` | #ecd03c | yellow soft-tops by the mural (gm-owner-01 sampled #e0ca51) and Line Up tees/logo board (#c39f23 in shade) — primary buttons, suns, the "10" |
 | `--pine` | #d6b27e | pine doors and oval room-name plaques (bk-80 / bk-26) — plaque badges |
 | `--sand` | #f1ebe1 / `--sand-2` #bfa084 | Anza sand in the upstairs view (sampled #bfa084), lifted for panels |
-| `--haze` | #f0debe | hazy late light over the sea (bk-17 sampled #e8dcc5) — text on night ink, duotone highlight |
+| `--haze` | #f0debe | hazy late light over the sea (bk-17 sampled #e8dcc5) — text on night ink |
 | `--err` | #a3260f | form errors (4.9:1 on board yellow) |
 Contrast: white on `--sky` 4.8:1; ink on `--board` 11:1; `--board` on `--sky` used only for ≥24 px bold display text.
 
@@ -40,7 +40,7 @@ Registered in `/home/agent/agadir-pilot/FONTS.md` (no overlap). Self-hosted woff
 
 ## 5. Grid, spacing, imagery, motion
 - **Grid:** 12 columns ≥960 px, max 1320 px content, gutters 24 px; side padding 20 px (<700) / 40 px. Spacing scale 4·8·12·16·24·32·48·64·96·128. Chapter padding clamp(48→112 / 64→136 px).
-- **Image treatment:** their phone photos, cropped hard: horizon-led crops for views (sky = room for type), 4:5 portraits for rooms, the shop "set" bottom-aligned at growing heights. No filters except one honest slate/haze duotone on the hazy late-light window photo (sunset chapter). Every `<img>` has width/height + dominant-colour background; WebP q72–80; hero 31 KB (640w) / 48 KB (900w) / 42 KB (desktop). Captions in small caps say what and where ("Anza beach from upstairs at Line Up").
+- **Image treatment:** their phone photos, cropped hard: horizon-led crops for views (sky = room for type), 4:5 portraits for rooms, the shop "set" bottom-aligned at growing heights (on phones a snap scroller with a "3 photos · swipe" cue, keyboard-focusable). No filters; the sunset photo only gets a small contrast lift and a slight warm balance (no toning). Every `<img>` has width/height + dominant-colour background; WebP q72–88. Captions in small caps say what and where ("Anza beach from upstairs at Line Up").
 - **Motion:** CSS + IntersectionObserver only. Cover horizon line draws left→right on load; each chapter marker's rule draws and its sun rises into place; the roof panel's sun sinks onto the line. Content is fully visible without JS; `prefers-reduced-motion` disables all of it.
 
 ## 6. Navigation, CTAs, sticky action, forms
@@ -67,7 +67,8 @@ Rooftop and Reviews are folded into The house (no rooftop photos; reviews work b
 - **Inside pages** sections open on the same chapter markers, with the sun moving through the page's own hours (the house page runs First light → All day → Evening → Sunset; rooms run 01–04 through midday).
 - **"The day goes on"** band before the footer links pages in the order of the day: house → surf → rooms → Anza → ask for dates.
 - **Anza cross-section**: house → car park → sand → white water → the line-up, drawn flat in CSS (order of things, never distances).
-- Every inner page closes with a yellow ask band (prefills `/book/?room=` / `?extra=`); `/book/` is the only full form besides the homepage chapter.
+- Every inner page closes with a yellow ask band (prefills `/book/?room=` / `?extra=`); `/book/` is the only full form besides the homepage chapter. Small "Ask about …" links prefill extras where they are discussed (rental, airport taxi, home-cooked meal).
+- **Photo allocation (phase 4):** each page opens on its own subject and the upstairs view is not repeated in the same light: home = hero view (bk-03) + window (bk-47) + late sun (bk-17); rooms masthead = a sea-view triple (bk-46); surf "Check it from the window" = open pine window on a grey day (bk-08); house = mural, house front (gm-03), evening window (bk-14), LINE UP towel (bk-34) + "Reef room" door (bk-27); Anza = levelled band (bk-45, captioned "The line-up, from the house") + the street outside the shop door (gm-01, right side).
 
 ### Section plans
 **Home (built)**
@@ -76,7 +77,7 @@ Rooftop and Reviews are folded into The house (no rooftop photos; reviews work b
 3. 02 First session — "Downstairs: the surf school." School + shop on the ground floor; lessons first-timers/improvers, private or small group, ask us [PROBABLE S2,S4]; board + wetsuit rental [VERIFIED S5]; prices → WhatsApp; "Zohair is often the one in the water with you" [PROBABLE, 3 independent]; quote Youness. Set: `shopfront` (gm-03, banner quoted), `boards` (gm-01), `wetsuits` (gm-05).
 4. 03 Midday — "Midday: eat, rest, wander." Rooms: 8 private, no dorms, 4 types ×2 with beds/guests/bathroom facts [VERIFIED S1; R8 bathroom CONFLICT → "ask us about the bathroom set-up"], door plaques "Open face"/"Reef room" [VERIFIED photos]; policy line [VERIFIED S1]. Lunch at home on request, paid, not a restaurant [PROBABLE S2,S2b]. Anza: quiet local surf town, dinosaur footprints, fried fish, Saïd sorts taxis/trips [PROBABLE]. Practical bit: beach, free public parking [VERIFIED], bus few minutes [PROBABLE S6], airport taxi help [PROBABLE S2b], Paradise Valley trips — ask [PROBABLE], languages [VERIFIED]. Images: `room-seaview` (bk-73), `room-triple` (bk-46), `room-private` (bk-55), `room-compact` (bk-80).
 5. 04 Second session — "Back out. Then back to the family." Some evenings a brother paddles out [PROBABLE]; family house, Saïd & Zohair brothers [VERIFIED S2b]; "10 — Staff score on Booking.com" [VERIFIED S1]; quote set Garig · Piekarec · Zoe.
-6. 05 Sunset — "Sunset from the roof." Roof terrace, sun over the Atlantic [PROBABLE S2,S2b; terrace VERIFIED S1]; "Some evenings everyone ends up at the same table" [PROBABLE]. Typographic roof panel; image `late-light` (bk-17, duotone, captioned).
+6. 05 Sunset — "Sunset from the roof." Roof terrace, sun over the Atlantic [PROBABLE S2,S2b; terrace VERIFIED S1]; "Some evenings everyone ends up at the same table" [PROBABLE]. Typographic roof panel; image `late-light` (bk-17, natural colour, low sun in the haze, captioned).
 7. Ask for dates — compact WhatsApp form (spec §8) + Booking.com alternative.
 8. Footer — wordmark, mural line "accommodation · Surf School · Shop" [VERIFIED S5], address, Maps, WhatsApp/tel/Booking, languages, check-in/out, kids over 5, no pets/parties.
 
@@ -90,7 +91,7 @@ Rooftop and Reviews are folded into The house (no rooftop photos; reviews work b
 Channels: WhatsApp `https://wa.me/212641236758` and `tel:+212641236758` (number VERIFIED S3; WhatsApp use = orchestrator decision, confirm with owner) · Booking.com `https://www.booking.com/hotel/ma/line-up-surf-house.html` [VERIFIED S1]. No email exists.
 - **Fields:** check-in (date, required, ≥ today) · check-out (date, required, > check-in; auto-set to +1 night) · adults (1–10, default 2) · children over 5 (0–6) · room (any / sea view double-twin / sea-view triple / private bathroom double-twin / compact double-twin) · also interested in (surf lessons · board & wetsuit rental · help with an airport taxi · home-cooked lunch or dinner) · name (optional) · anything else (optional textarea: level, arrival time, dietary needs). Book page (phase 3) may add: arrival time select.
 - **Validation:** client-side on submit; inline messages (`aria-invalid`, `aria-describedby`), summary bar with `role=alert`, focus to first bad field. Strings come from the page language (JSON in the form).
-- **Compose → open:** `wa.me/212641236758?text=<encodeURIComponent(message)>` in a new tab; the form is replaced by a success panel: "Your message is ready in WhatsApp…" + **Didn't open? Tap here** (same URL) + call link + Booking.com + "Change something". Empty optional fields are omitted (never "undefined").
+- **Compose → open:** `wa.me/212641236758?text=<encodeURIComponent(message)>` in a new tab; the form is replaced by a success panel: "Your message is ready in WhatsApp…" + **Open WhatsApp again** / **Rouvrir WhatsApp** (same URL) + call link + Booking.com + "Change something". Empty optional fields are omitted (never "undefined"). FR CTA label everywhere: "Demander les dispos" (H1 "Dites-nous vos dates.", band "Vos dates ?"). With JS off, a `<noscript>` line under the submit button gives the plain WhatsApp + phone links. On `/book/`, the language switch carries `?room=` / `?extra=` over.
 - **Message EN** (dates via `toLocaleDateString('en-GB')`):
 ```
 Hello Line Up! I'd like to ask about a stay.
@@ -114,7 +115,7 @@ Bonjour Line Up ! J'aimerais avoir des infos pour un séjour.
 • Départ : mar. 17 nov. 2026 (3 nuits)
 • Voyageurs : 2 adultes, 1 enfant (plus de 5 ans)
 • Chambre : Vue mer · double ou twin
-• Intéressé·e aussi par : cours de surf, location planche et combinaison
+• Aussi intéressé·e par : cours de surf, location planche et combinaison
 • Note : débutante, arrivée tard
 
 Nom : Ana

@@ -19,16 +19,16 @@ Status: USE = business-owned and worth showing · CONTEXT-ONLY = business-owned 
 | `bk-05-dt-privbath-B-635800875.jpg` | bstatic …/hotel/max1024x768/635800875.jpg | Shower, grey marble tiles — Booking room: R2 Dbl/Twin PrivBath (white/grey marble) | Booking.com listing (property's own upload) | 2 | CONTEXT-ONLY | — |
 | `bk-06-dt-privbath-B-635800861.jpg` | bstatic …/hotel/max1024x768/635800861.jpg | Twin beds, white room, coat stand, olive bedspreads — Booking room: R2 Dbl/Twin PrivBath (white/grey marble) | Booking.com listing (property's own upload) | 3 | USE | Stay gallery (private-bath twin) |
 | `bk-07-triple-seaview-B-694633021.jpg` | bstatic …/hotel/max1024x768/694633021.jpg | Single bed + window — Booking room: R6 Triple SeaView B | Booking.com listing (property's own upload) | 2 | CONTEXT-ONLY | — |
-| `bk-08-triple-seaview-B-694633028.jpg` (+hires/) | bstatic …/hotel/max1024x768/694633028.jpg | Opened pine window over car park to the sea, overcast sky — Booking room: R6 Triple SeaView B | Booking.com listing (property's own upload) | 3 | USE | Stay / window motif |
+| `bk-08-triple-seaview-B-694633028.jpg` (+hires/) | bstatic …/hotel/max1024x768/694633028.jpg | Opened pine window over car park to the sea, overcast sky — Booking room: R6 Triple SeaView B | Booking.com listing (property's own upload) | 3 | USE | Surf "Check it from the window" (`window-open`, phase 4) |
 | `bk-09-triple-seaview-B-694633034.jpg` | bstatic …/hotel/max1024x768/694633034.jpg | Two singles, red LED ceiling — Booking room: R6 Triple SeaView B | Booking.com listing (property's own upload) | 2 | CONTEXT-ONLY | — |
 | `bk-10-triple-seaview-B-694633041.jpg` | bstatic …/hotel/max1024x768/694633041.jpg | Single bed close-up — Booking room: R6 Triple SeaView B | Booking.com listing (property's own upload) | 2 | CONTEXT-ONLY | — |
 | `bk-11-triple-seaview-B-694633046.jpg` | bstatic …/hotel/max1024x768/694633046.jpg | Two singles, LED ceiling — Booking room: R6 Triple SeaView B | Booking.com listing (property's own upload) | 2 | CONTEXT-ONLY | — |
 | `bk-12-triple-seaview-B-694633051.jpg` | bstatic …/hotel/max1024x768/694633051.jpg | Bed by window with sea glimpse — Booking room: R6 Triple SeaView B | Booking.com listing (property's own upload) | 3 | USE | Stay gallery (triple) |
 | `bk-13-dt-seaview-B-694632891.jpg` | bstatic …/hotel/max1024x768/694632891.jpg | Double bed, window — Booking room: R4 Dbl/Twin SeaView B (shared bath) | Booking.com listing (property's own upload) | 3 | USE | Stay gallery |
-| `bk-14-dt-seaview-B-694632895.jpg` (+hires/) | bstatic …/hotel/max1024x768/694632895.jpg | Window open on beach + low hazy sun, LED reflected in glass (evening feel) — Booking room: R4 Dbl/Twin SeaView B (shared bath) | Booking.com listing (property's own upload) | 3 | USE | Sunset/evening band (treat) |
+| `bk-14-dt-seaview-B-694632895.jpg` (+hires/) | bstatic …/hotel/max1024x768/694632895.jpg | Window open on beach + low hazy sun, LED reflected in glass (evening feel) — Booking room: R4 Dbl/Twin SeaView B (shared bath) | Booking.com listing (property's own upload) | 3 | USE | House roof section (`evening-window`, phase 4) |
 | `bk-15-dt-seaview-B-694632904.jpg` | bstatic …/hotel/max1024x768/694632904.jpg | Double bed — Booking room: R4 Dbl/Twin SeaView B (shared bath) | Booking.com listing (property's own upload) | 3 | CONTEXT-ONLY | alt |
 | `bk-16-dt-seaview-B-694632906.jpg` | bstatic …/hotel/max1024x768/694632906.jpg | Double bed, red LED ceiling — Booking room: R4 Dbl/Twin SeaView B (shared bath) | Booking.com listing (property's own upload) | 2 | CONTEXT-ONLY | — |
-| `bk-17-dt-seaview-B-694632909.jpg` (+hires/) | bstatic …/hotel/max1024x768/694632909.jpg | Through window: car park, beach, hazy sun on the sea — Booking room: R4 Dbl/Twin SeaView B (shared bath) | Booking.com listing (property's own upload) | 3 | USE | Sunset band / Anza |
+| `bk-17-dt-seaview-B-694632909.jpg` (+hires/) | bstatic …/hotel/max1024x768/694632909.jpg | Through window: car park, beach, hazy sun on the sea — Booking room: R4 Dbl/Twin SeaView B (shared bath) | Booking.com listing (property's own upload) | 3 | USE | Home ch05 sunset (`late-light`, natural colour) |
 | `bk-18-dt-seaview-B-694632910.jpg` | bstatic …/hotel/max1024x768/694632910.jpg | Double bed, window — Booking room: R4 Dbl/Twin SeaView B (shared bath) | Booking.com listing (property's own upload) | 3 | CONTEXT-ONLY | alt |
 | `bk-19-dt-B-640505818.jpg` | bstatic …/hotel/max1024x768/640505818.jpg | In-room basin & mirror, twin beds behind — Booking room: R8 Dbl/Twin "Reef room" | Booking.com listing (property's own upload) | 2 | CONTEXT-ONLY | — |
 | `bk-20-dt-B-640505822.jpg` | bstatic …/hotel/max1024x768/640505822.jpg | Shower + basin cubicle — Booking room: R8 Dbl/Twin "Reef room" | Booking.com listing (property's own upload) | 2 | CONTEXT-ONLY | — |
@@ -38,14 +38,14 @@ Status: USE = business-owned and worth showing · CONTEXT-ONLY = business-owned 
 | `bk-24-dt-B-640505607.jpg` | bstatic …/hotel/max1024x768/640505607.jpg | Twin beds, floral — Booking room: R8 Dbl/Twin "Reef room" | Booking.com listing (property's own upload) | 3 | CONTEXT-ONLY | alt |
 | `bk-25-dt-B-640505617.jpg` | bstatic …/hotel/max1024x768/640505617.jpg | Twin beds, floral — Booking room: R8 Dbl/Twin "Reef room" | Booking.com listing (property's own upload) | 3 | CONTEXT-ONLY | alt |
 | `bk-26-dt-B-640505626.jpg` (+hires/) | bstatic …/hotel/max1024x768/640505626.jpg | Door plaque 'Reef room' over open pine door, twin beds inside — Booking room: R8 Dbl/Twin "Reef room" | Booking.com listing (property's own upload) | 4 | USE | Stay — room-name detail (surf vocabulary) |
-| `bk-27-dt-B-640505634.jpg` | bstatic …/hotel/max1024x768/640505634.jpg | Pine door with 'Reef room' plaque — Booking room: R8 Dbl/Twin "Reef room" | Booking.com listing (property's own upload) | 3 | USE | Detail strip |
+| `bk-27-dt-B-640505634.jpg` | bstatic …/hotel/max1024x768/640505634.jpg | Pine door with 'Reef room' plaque — Booking room: R8 Dbl/Twin "Reef room" | Booking.com listing (property's own upload) | 3 | USE | House rules pair (`reef-door`, phase 4) |
 | `bk-28-dt-privbath-B-635800867.jpg` | bstatic …/hotel/max1024x768/635800867.jpg | Twin beds, shag rug — Booking room: R2 Dbl/Twin PrivBath (white/grey marble) | Booking.com listing (property's own upload) | 3 | CONTEXT-ONLY | alt |
 | `bk-29-triple-seaview-635808047.jpg` (+hires/) | bstatic …/hotel/max1024x768/635808047.jpg | Triple: three single beds, LINE UP towels — Booking room: R5 Triple SeaView A | Booking.com listing (property's own upload) | 4 | USE | Stay — triple |
 | `bk-30-dt-privbath-A-635809340.jpg` | bstatic …/hotel/max1024x768/635809340.jpg | Double, blue LED ceiling — Booking room: R1 Dbl/Twin PrivBath (blue-LED) | Booking.com listing (property's own upload) | 3 | CONTEXT-ONLY | alt |
 | `bk-31-dt-privbath-B-635800868.jpg` | bstatic …/hotel/max1024x768/635800868.jpg | Bathroom basin, marble — Booking room: R2 Dbl/Twin PrivBath (white/grey marble) | Booking.com listing (property's own upload) | 2 | CONTEXT-ONLY | — |
 | `bk-32-dt-seaview-A-635804469.jpg` (+hires/) | bstatic …/hotel/max1024x768/635804469.jpg | Black window frame framing beach and sea, blue sky — Booking room: R3 Dbl/Twin SeaView (shared bath) | Booking.com listing (property's own upload) | 4 | USE | Window/'line-up' framing motif |
 | `bk-33-unassigned-635804474.jpg` | bstatic …/hotel/max1024x768/635804474.jpg | Lounge corner: Moroccan banquettes, tall pine mirror (not linked to a room) — Booking room: gallery only | Booking.com listing (property's own upload) | 2 | CONTEXT-ONLY | Ask owner what space this is |
-| `bk-34-dt-seaview-A-635804460.jpg` | bstatic …/hotel/max1024x768/635804460.jpg | Twin beds, LINE UP towel — Booking room: R3 Dbl/Twin SeaView (shared bath) | Booking.com listing (property's own upload) | 3 | USE | Stay (sea-view twin) |
+| `bk-34-dt-seaview-A-635804460.jpg` | bstatic …/hotel/max1024x768/635804460.jpg | Twin beds, LINE UP towel — Booking room: R3 Dbl/Twin SeaView (shared bath) | Booking.com listing (property's own upload) | 3 | USE | House rules pair (`towel`, phase 4) |
 | `bk-35-triple-seaview-635808070.jpg` | bstatic …/hotel/max1024x768/635808070.jpg | Two singles, coat stand — Booking room: R5 Triple SeaView A | Booking.com listing (property's own upload) | 3 | CONTEXT-ONLY | alt |
 | `bk-36-dt-privbath-B-635800864.jpg` | bstatic …/hotel/max1024x768/635800864.jpg | Twin room — Booking room: R2 Dbl/Twin PrivBath (white/grey marble) | Booking.com listing (property's own upload) | 2 | CONTEXT-ONLY | — |
 | `bk-37-dt-seaview-A-635804455.jpg` | bstatic …/hotel/max1024x768/635804455.jpg | Twin beds, LINE UP towel, red LED — Booking room: R3 Dbl/Twin SeaView (shared bath) | Booking.com listing (property's own upload) | 3 | CONTEXT-ONLY | alt |
@@ -70,7 +70,7 @@ Status: USE = business-owned and worth showing · CONTEXT-ONLY = business-owned 
 | `bk-56-dt-privbath-A-635809332.jpg` | bstatic …/hotel/max1024x768/635809332.jpg | Double bed — Booking room: R1 Dbl/Twin PrivBath (blue-LED) | Booking.com listing (property's own upload) | 3 | CONTEXT-ONLY | alt |
 | `bk-57-dt-privbath-A-635809344.jpg` | bstatic …/hotel/max1024x768/635809344.jpg | Double bed — Booking room: R1 Dbl/Twin PrivBath (blue-LED) | Booking.com listing (property's own upload) | 3 | CONTEXT-ONLY | alt |
 | `bk-58-triple-seaview-635808040.jpg` | bstatic …/hotel/max1024x768/635808040.jpg | Triple, three beds, window — Booking room: R5 Triple SeaView A | Booking.com listing (property's own upload) | 3 | CONTEXT-ONLY | alt |
-| `bk-59-triple-seaview-635808073.jpg` | bstatic …/hotel/max1024x768/635808073.jpg | Window to sea from triple — Booking room: R5 Triple SeaView A | Booking.com listing (property's own upload) | 3 | CONTEXT-ONLY | alt |
+| `bk-59-triple-seaview-635808073.jpg` | bstatic …/hotel/max1024x768/635808073.jpg | Window to sea from triple — Booking room: R5 Triple SeaView A | Booking.com listing (property's own upload) | 3 | USE | Rooms — triple set (`room-triple-window`, phase 4) |
 | `bk-60-triple-seaview-635804471.jpg` | bstatic …/hotel/max1024x768/635804471.jpg | Shared bathroom (marble) — Booking room: R5 Triple SeaView A; R3 Dbl/Twin SeaView (shared bath) | Booking.com listing (property's own upload) | 2 | CONTEXT-ONLY | — |
 | `bk-61-triple-seaview-635804477.jpg` | bstatic …/hotel/max1024x768/635804477.jpg | Shared bathroom (marble) — Booking room: R5 Triple SeaView A; R3 Dbl/Twin SeaView (shared bath) | Booking.com listing (property's own upload) | 2 | CONTEXT-ONLY | — |
 | `bk-62-triple-seaview-635808049.jpg` | bstatic …/hotel/max1024x768/635808049.jpg | Triple beds, coat stand — Booking room: R5 Triple SeaView A | Booking.com listing (property's own upload) | 3 | CONTEXT-ONLY | alt |
@@ -135,7 +135,7 @@ Alternates: `gm-owner-04.jpg` (shop interior), `bk-14` (evening window), `bk-55`
 ## Phase 3 outputs (tools/images.py → site/assets/img/)
 | output | source | placement |
 |---|---|---|
-| `view-window-640/1000` | bk-32 (hires) | Rooms masthead |
+| ~~`view-window-640/1000`~~ | bk-32 (hires) | Retired in phase 4 (Rooms masthead now opens on a room; the window view was a 5th repeat of the upstairs scene) |
 | `room-seaview-dbl-480/675` | bk-13 | Rooms — sea view set (double) |
 | `room-triple-3-480/800` | bk-29 (hires) | Rooms — triple set |
 | `room-private-twin-480/675` | bk-06 | Rooms — private bathroom set (twin) |
@@ -143,4 +143,21 @@ Alternates: `gm-owner-04.jpg` (shop interior), `bk-14` (evening window), `bk-55`
 | `mural-640/1000` | gm-owner-06 | The house masthead |
 | `shop-inside-640/1000` | gm-owner-04 | Surf masthead |
 | `anza-view-800/1200/1290` | bk-45 (hires), levelled −2.69°, horizon 0.45 | Anza band with the line-up hairline |
-Reused: `room-seaview`, `room-triple`, `room-private`, `room-compact` (rooms sets), `window` (surf "the water"), `logo-board`, `boards`, `wetsuits` (surf rental set). No third-party imagery anywhere → no credits page needed (all photos are the property's own Booking.com uploads or Google owner photos).
+Reused: `room-seaview`, `room-triple`, `room-private`, `room-compact` (rooms sets), `logo-board`, `boards`, `wetsuits` (surf rental set). No third-party imagery anywhere → no credits page needed (all photos are the property's own Booking.com uploads or Google owner photos).
+
+## Phase 4 re-allocation (Audit B2/B3/B4)
+The upstairs view had been used 5× (hero, home ch01, surf, rooms masthead, Anza band). Now each page opens on its own subject, and every repeat of the view shows a different light/time:
+| output | source | placement |
+|---|---|---|
+| `hero-d-1000/1411` | bk-03 (hires), crop widened to 1411 px (window frame at x<115 excluded), q88 | Home cover ≥700 px |
+| `room-triple` (existing) | bk-46 (hires) | Rooms masthead ("A sea-view triple") + home ch03 triple row |
+| `room-triple-window-480/675` | bk-59 (R5) | Rooms — triple set ("The window side"), replaces the masthead photo there |
+| `window-open-640/1000` | bk-08 (hires) | Surf "Check it from the window" (open pine window, grey day) — `window` (bk-47) is now home ch01 only |
+| `late-light-640/780` | bk-17 (hires), natural colour, contrast ×1.06, slight warm balance (no duotone) | Home ch05 sunset — ends the day on the real low sun over the sea |
+| `evening-window-640/780` | bk-14 (hires), LED reflections cropped out | House — "The roof, at the end of the day" (captioned as a sea-view room, not the roof) |
+| `shopfront` (existing) | gm-owner-03 | House — family section ("Our front door: the shop downstairs, the rooms upstairs") + home ch02 |
+| `towel-480` | bk-34 | House — rules pair ("Our name on the towels") |
+| `reef-door-480/675` | bk-27 | House — rules pair ("Some doors carry names from the water") |
+| `street-640` | gm-owner-01, right side (shop door, board on trestles, street to the beach parasols) | Anza — "Out the front door" |
+| `anza-view` (existing) | bk-45 | Anza band, recaptioned "The line-up, from the house"; band capped at 1400 px (no more upscaling at 1920) |
+Still missing (owner via Fadwa): rooftop, breakfast, family, lessons in the water, and a full-size original of the upstairs view (the desktop hero is upscaled above ~1400 px).

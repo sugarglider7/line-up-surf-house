@@ -76,11 +76,11 @@ Tags refer to SOURCE_OF_TRUTH.md (S1 Booking listing · S2 Booking reviews · S2
 | Breakfast included, vegetarian & halal, made by the family every morning, changes day to day | VERIFIED S1 / PROBABLE S2 | softened ("Today, maybe" list) |
 | "These days it's served upstairs, with the sea in view" | PROBABLE S2, S2b (2026) | softened |
 | Diets / early flights → tell us | VERIFIED S2b | "we'll do what we can" |
-| "Our parents in the kitchen", two brothers Saïd and Zohair between the shop, the house and the water | PROBABLE S2 (parents, ~10) / VERIFIED S2b (brothers) | no names for parents, no titles |
+| Run by our family: two brothers Saïd and Zohair between the shop, the house and the water, the whole family behind breakfast (phase 4: parents not mentioned beyond "the family") | VERIFIED S2b (family-run, brothers) | no parents' roles, no titles |
 | Saïd + Zohair sentences | PROBABLE | **exact ceiling sentences, nothing added** |
 | Ask us about: taxi into Agadir, taxi to airport, day trips (Paradise Valley…), renting a car, local SIM card, where to eat fried fish | PROBABLE S2; car rental help S2b | framed as "Ask us about" |
-| No restaurant, no menu; tajine (chicken/kefta), lubya when ordered ahead, paid separately | PROBABLE S2, S2b | softened |
-| Roof terrace, whole beach and surf, sunset over the Atlantic | VERIFIED S1 (terrace) / PROBABLE S2 | softened; typographic roof panel, no fake photo |
+| No restaurant, no menu; tajine (chicken/kefta), lubya — ask a day ahead, the family can usually cook; extra (phase 4 wording) | PROBABLE S2, S2b | softened |
+| Roof terrace, a view over the beach and the surf, sunset over the Atlantic (phase 4: no "whole beach") | VERIFIED S1 (terrace) / PROBABLE S2 | softened; typographic roof panel + a sea-view-room evening photo captioned as such, no fake roof photo |
 | 9.6 Booking.com · 10 staff · 9.8 value for money · 4.9 Google | VERIFIED S1, S3 | verified, no dates/counts |
 | House rules | VERIFIED S1 | verified |
 
@@ -103,7 +103,7 @@ Tags refer to SOURCE_OF_TRUTH.md (S1 Booking listing · S2 Booking reviews · S2
 | Good to know: check-in/out, breakfast included, children over 5 / no cribs, no pets/parties | VERIFIED S1 | verified |
 
 ### Quotes (exact substrings of the captured review corpus — re-checked by script against `research/raw/booking_reviews.json` + `google_reviews.json`; never translated)
-EN pages: Katharina (CA), Youness (MA), Piekarec (PL), Rafal (PL) ×2, Marta (NL), Safae (NL), Simon (UK), Jochem (NL), Erika (AT), Ahmed (US), Garig (BE), Zoe (UK) — all Booking.com.
+EN pages: Katharina (CA), Youness (MA), Piekarec (PL), Rafal (PL) ×2, Marta (NL), Safae (NL), Lina (AT — replaced Simon UK in phase 4, parents rule), Jochem (NL), Erika (AT), Ahmed (US), Garig (BE), Zoe (UK) — all Booking.com.
 FR pages (French originals): Carole, Lucile, Pierre-jean, Barbara, Julien, Laure, Omar (France); Hamadi, Younes, Zineb (Maroc); Marielle (Belgique); Dany (Canada) — all Booking.com; English quotes on FR pages keep `lang="en"`.
 Excluded on purpose: quotes giving the brothers roles beyond the ceiling (Gildo "teacher", Younes "qui gèrent l'endroit", Laura 3 a.m.), possibly affiliated Google accounts, "second to none" (banned phrase).
 
@@ -126,14 +126,14 @@ Removed/softened in phase 3: "one staircase away" (ground-floor rooms exist) →
 | Success state | form replaced by panel; "Didn't open? Tap here" href identical to opened URL; call + Booking.com + "Change something" |
 | Prefill | `/book/?room=triple&extra=lessons&extra=taxi` preselects room + chips (used by "Ask for this room" / "Want a lesson?") |
 | Sticky dock | hidden over masthead/cover, every ask band, the whole booking section and the footer; never covers submit (checked at 7 scroll positions on /book/); fits one line at 360 px |
-| JSON-LD | Hostel on home (aggregateRating 9.6/10, 208 — verified), BreadcrumbList on inner pages; all parse |
+| JSON-LD | Hostel on home (phase 4: no aggregateRating — orchestrator decision; the rating stays visible on the page; FR amenity names in French), BreadcrumbList on inner pages; all parse |
 | `_headers` | /assets/* immutable 1 year; nosniff, referrer policy, X-Frame-Options DENY, HSTS, Permissions-Policy, CSP (self + Cloudflare Web Analytics beacon that Pages injects; wa.me/tel/maps are plain navigations, unaffected) |
 
 ## 4. Performance (390 × 844, cache disabled, local preview — uncompressed; Cloudflare adds brotli on HTML/CSS/JS)
 | template | KB before scroll | requests | LCP element | CLS |
 |---|---|---|---|---|
 | Home `/` | 240 | 8 | hero-m-640.webp (31 KB) | 0 |
-| Rooms | 231 | 9 | view-window-640.webp (24 KB) | 0 |
+| Rooms | 231 | 9 | view-window-640.webp (24 KB) — phase 4: masthead is now room-triple | 0 |
 | Surf | 215 | 7 | shop-inside-640.webp (48 KB) | 0 |
 | House | 215 | 7 | mural-640.webp (47 KB) | 0 |
 | Anza | 200 | 7 | anza-view-800.webp (34 KB) | 0 |
@@ -308,3 +308,49 @@ Auditor: AuditVisualLineUp · 2026-10-02 · live https://line-up-surf-house.peas
 - **B14 · P3** · `/anza/` band · 1440–1920 · `anza-view-1290` is stretched to the full window width, so it is soft at 1440 and visibly upscaled at 1920. The "| THE LINE-UP" label sits over the neighbour's white wall at the right edge, white on white (`fold-1440-anza.jpg`, `fold-1920-anza.jpg`). · **Fix:** cap the band at `max-width:1400px; margin-inline:auto`, or use the hi-res bk-45 at 1920w. Move the label to `right:22%`, or give it the caption's ink chip.
 
 **Counts:** P0 1 · P1 0 · P2 4 · P3 9.
+
+## Fix log
+
+Phase 4 fix pass (FixLineUp, 2026-10-02). All changes made in `tools/content/en.py` / `fr.py`, `tools/build.py`, `tools/images.py`, `site/assets/css/site.css` and `site/assets/js/site.js`, then rebuilt. `check_site: OK (13 pages)`. Screenshots are in `/home/agent/agadir-pilot/qa/line-up-surf-house/p4-fix/` (one tab, preview 127.0.0.1:8703). Orchestrator decision applied: `aggregateRating` removed from the JSON-LD; the 9.6 stays visible on the page.
+
+| ID | status | how verified |
+|---|---|---|
+| A1 | fixed. EN: "Line Up is run by our family: two brothers, Saïd and Zohair, between the shop, the house and the water, and the whole family behind breakfast." FR to match. No parents anywhere. A rule was added to SoT §e. | Grep over built HTML: no "parents", "Mum" or "Dad" |
+| A2 | fixed. Simon's quote was replaced with Lina, Austria: "The breakfast was exceptional with tea, coffee, freshly pressed orange juice…" | Exact substring of `booking_reviews.json`, checked by script |
+| A3 | fixed. "…with towels, free Wi-Fi and a shower — in the room or just outside it" (FR to match) | Built /, /fr/ |
+| A4 | fixed. Card: "Three singles" + "One of the two can also do a single + a king". Rooms spec: "One of the two triples can also be set up as a single and a king — ask us." FR uses "grand lit (king size)". | Built /, /rooms/ + FR |
+| A5 | fixed. "Not a resort strip" / "station balnéaire" are gone. New line: "Small town, long beach. Simple cafés, fried fish, and the surf right in front of the house." The footprint line is now factual and short, with no "ask us the way". | Grep for resort/station balnéaire/chemin: 0 hits. Hyle footprint wording ("odd little claim to fame") not shared |
+| A6 | fixed. FR CTA, nav, crumb and title: "Demander les dispos". /fr/reserver/ H1: "Dites-nous vos dates." Home ask band: "Vos dates ?" | FR header at 1920 fits on one line (`fold-1920-fr.jpg`). FR sheet balanced on 2 lines (`390-menu-fr.jpg`) |
+| A7 | fixed. "Ask a day ahead and the family can usually cook…" / "Demandez la veille et, en général, la famille peut vous préparer…". Meta descriptions match. | Built HTML |
+| A8 | fixed. "Some doors carry names from the water". FR: "Certaines portes ont un nom venu de l’eau" (no more "portes portent") | Built HTML |
+| A9 | fixed. "Open the window" / "Vous ouvrez la fenêtre" | Grep shutter/volet: 0 |
+| A10 | fixed. "Moroccan tea or coffee" / "thé marocain ou café" | Grep mint/menthe: 0 |
+| A11 | fixed. "you look out over the beach and the surf" / "vous avez la plage et les vagues sous les yeux" | Grep whole beach/toute la plage: 0 |
+| A12 | fixed. "Private or small group — ask us" / "…— demandez-nous" | Built /surf/ |
+| A13 | fixed. "someone from the family is usually close by" / "quelqu’un de la famille n’est jamais bien loin" | Grep nearly always/presque toujours: 0 |
+| A14 | fixed. House H1: "Breakfast to sunset, at our house." / "Du petit-déj au coucher de soleil, chez nous." Rules: "People get up early here to surf. So: no parties." Meta: "by Anza beach" | `fold-1440-fr_la-maison.jpg`, `390-house.jpg` |
+| A15 | fixed. The Zohair line appears only on home ch2 + /surf/, the Saïd line only on home ch3 + /anza/. The `said`/`zohair` keys were removed from /house/. | Grep: each line is on exactly 2 pages per language |
+| A16 | fixed. Rooms lead: "Two of each kind: pick by view or by bathroom." "…and we like it that way" dropped. Family title: "Saïd, Zohair and the family." Book kicker: "Your stay" / "Votre séjour" (better than the proposed "Your dates", which would repeat the H1) | Built HTML |
+| A17 | fixed. "surf shop" in the cover lead, meta and JSON-LD description | Built HTML |
+| A18 | fixed. "planches en résine", "grand lit (king size)", "C’est souvent Zohair qui est à l’eau avec vous.", "C’est généralement Saïd qui s’occupe…" | Grep "planches dures"/"lit king": 0 |
+| A19 | fixed. "Note « Personnel »", "Les notes de nos voyageurs.", "Peu importe — conseillez-moi", "Rouvrir WhatsApp" (B8 2-word label), "Appuyez sur", "Aussi intéressé·e par", "Dites-nous quand vous venez, et à combien.", "Jusqu’à 12 h", "C’est en supplément" | Decoded FR wa.me text shows "Aussi intéressé·e par" |
+| A20 | fixed. "vous" for guest actions: window/breakfast line, rental line, sunset lead, roof lead | Built /fr/ pages |
+| A21 | fixed. Address line 2 is now per language (`FOOTER.address2`: "Maroc" on FR). FR JSON-LD amenity names are in French (`AMENITIES`). | JSON-LD parsed from /fr/: 5 French names, no aggregateRating |
+| B1 (P0) | fixed. The cover columns are sized from the centred column (`--wrapw = min(100cqw, 1400px)`), not from the full-bleed width. Lead = 410 px and H1 = 744 px at every width. | Measured at 1440/1600/1920/2560: identical layout, nothing under the header. `fold-{1440,1600,1920,2560}-home.jpg`, `fold-1920-fr.jpg` |
+| B2 | fixed. /house/ went from 1 photo to 5: mural, house front (gm-03), evening window (bk-14), LINE UP towel (bk-34), "Reef room" door (bk-27). /anza/ went from 1 to 2: the band plus the street outside the shop door (gm-01, right side). The lounge bk-33 is not used (unknown space, CONTEXT-ONLY). | `1440-house.jpg`, `390-house.jpg`, `1440-anza.jpg` |
+| B3 | fixed. /rooms/ opens on a sea-view triple (bk-46). The triple set now uses bk-59. /surf/ uses the open pine window on a grey day (bk-08). `window` (bk-47) appears on home only. `view-window` (bk-32) is retired. The Anza band is recaptioned "The line-up, from the house". | `fold-390-rooms.jpg`, `fold-1440-rooms.jpg`, `390-surf.jpg` |
+| B4 | fixed. The sunset chapter now ends on bk-17 in natural colour (low sun in the haze, light on the water), with a small contrast lift and a slight warm balance. No duotone and no fake sunset. A second real evening photo (bk-14) went to /house/ roof. | `c-1440-home-sunset.jpg` |
+| B5 | fixed. The H1 baseline now sits .06 em above the hairline at every width: measured gap 2.7 px at 390, 2.8 px at 360, 5.4 px at 1440 to 2560 (was 57 px at 1440). The lead column also stands on the line. The text-shadow is stronger. The hero-d crop is wider (1411 px, q88). A full-size original photo is still an owner request. | JS baseline measurement + `fold-*-home.jpg` |
+| B6 | fixed. Below 380 px the date fields stack full width (320 px at 360) | `360-book-dates.jpg`, `fold-360-fr_reserver.jpg` |
+| B7 | fixed. Footer links, the wordmark and the language link are now ≥44 px (`min-height`/`min-width`) | Script at 390 on /rooms/: no `a`/`button` under 44 px |
+| B8 | fixed. `text-wrap:balance` on h3, the room names and the sheet links. NBSP in the listed headlines. Success label: "Open WhatsApp again" / "Rouvrir WhatsApp". Book kicker: NBSP before "·" | Widow scan over 12 pages at 390/1440: only intentional stacked display lines remain. Sheet EN on 1 line, FR balanced |
+| B9 | fixed. On form pages the language switch carries over a sanitised `?room=`/`?extra=` | /book/?room=triple&extra=taxi&extra=meals → FR link keeps the query; FR → EN as well |
+| B10 | fixed. "Ask about rental" (`?extra=rental`), "Ask about a home-cooked meal" (`meals`), "Ask about an airport taxi" (`taxi`) on /house/ and /anza/. FR to match. | Prefill on /book/?…extra=taxi&extra=meals checked both chips (decoded message) |
+| B11 | fixed. A past check-in no longer drags check-out into the past. `min` = max(today, check-in) + 1. | Script: past 20 Sep → out.min 3 Oct, value untouched; fixed to 20 Oct → 21 Oct |
+| B12 | fixed. A `<noscript>` line under the submit button gives plain WhatsApp + phone links. `action` was not set (CSP `form-action 'self'`). | Built HTML |
+| B13 | fixed. The set scroller is focusable (`tabindex=0`, focus outline) and has a "3 photos · swipe" / "faites glisser" cue under 960 px. The growing-wave heights are kept. | `390-surf.jpg` |
+| B14 | fixed. The band is capped at 1400 px and centred. The label sits at `right:24%` on an ink chip (over the sea, not the white wall). | `c-1440-anza-band.jpg` |
+
+Won't fix: none. One note on B5: no sharper source of the hero exists in the research material. Booking serves at most 1536 px on the long side. The fix is the owner's original photo, which is on the Fadwa list.
+
+Re-verified after the fixes (preview, one tab): 0 console errors, 0 page errors, 0 broken images on all 12 pages at 1440. `scrollWidth` = 360 on all 12 pages at 360. One h1 per page. Decoded wa.me text EN/FR is correct (accents, &, em dash, plurals, en-GB/fr-FR dates, prefilled room + extras, no undefined/NaN). Static check: every internal href/src/srcset resolves.

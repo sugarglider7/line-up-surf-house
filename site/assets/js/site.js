@@ -109,9 +109,10 @@
   fin.addEventListener("change", function () {
     var a = parse(fin.value);
     if (!a) return;
-    var next = addDays(a, 1), b = parse(fout.value);
+    var base = a < today ? today : a; /* a past check-in never drags check-out into the past */
+    var next = addDays(base, 1), b = parse(fout.value);
     fout.min = iso(next);
-    if (!b || b <= a) fout.value = iso(next);
+    if (a >= today && (!b || b <= a)) fout.value = iso(next);
     clearErr(fin); clearErr(fout);
   });
   fout.addEventListener("change", function () { clearErr(fout); });
@@ -125,6 +126,16 @@
       if (box) box.checked = true;
     });
   } catch (e) { /* old browser: no prefill */ }
+
+  /* the language switch keeps the prefilled room/extras (same keys in both languages) */
+  try {
+    var src = new URLSearchParams(location.search), keep = new URLSearchParams();
+    ["room", "extra"].forEach(function (k) {
+      src.getAll(k).forEach(function (v) { v = v.replace(/[^a-z]/g, ""); if (v) keep.append(k, v); });
+    });
+    var q = keep.toString();
+    if (q) d.querySelectorAll("a.lang[hreflang]").forEach(function (l) { l.href = l.getAttribute("href") + "?" + q; });
+  } catch (e) { /* old browser: plain switch */ }
 
   function errEl(input) { return d.getElementById(input.getAttribute("aria-describedby")); }
   function setErr(input, msg) { input.setAttribute("aria-invalid", "true"); var e = errEl(input); e.textContent = msg; e.hidden = false; }

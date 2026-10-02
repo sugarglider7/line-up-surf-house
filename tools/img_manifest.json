@@ -44,25 +44,44 @@
   ],
   "w": 1200
  },
+ "evening-window": {
+  "color": "#9b968d",
+  "h": 975,
+  "variants": [
+   {
+    "file": "evening-window-640.webp",
+    "h": 800,
+    "kb": 34.1,
+    "w": 640
+   },
+   {
+    "file": "evening-window-780.webp",
+    "h": 975,
+    "kb": 42.4,
+    "w": 780
+   }
+  ],
+  "w": 780
+ },
  "hero-d": {
-  "color": "#779ec7",
-  "h": 785,
-  "horizon": 0.7245,
+  "color": "#759fcb",
+  "h": 794,
+  "horizon": 0.7525,
   "variants": [
    {
     "file": "hero-d-1000.webp",
-    "h": 562,
-    "kb": 29.8,
+    "h": 563,
+    "kb": 40.6,
     "w": 1000
    },
    {
-    "file": "hero-d-1396.webp",
-    "h": 785,
-    "kb": 42.6,
-    "w": 1396
+    "file": "hero-d-1411.webp",
+    "h": 794,
+    "kb": 59.4,
+    "w": 1411
    }
   ],
-  "w": 1396
+  "w": 1411
  },
  "hero-m": {
   "color": "#698fbf",
@@ -85,23 +104,23 @@
   "w": 1200
  },
  "late-light": {
-  "color": "#9f9d96",
-  "h": 580,
+  "color": "#bcb1a0",
+  "h": 610,
   "variants": [
    {
     "file": "late-light-640.webp",
-    "h": 470,
-    "kb": 13.1,
+    "h": 501,
+    "kb": 18.5,
     "w": 640
    },
    {
-    "file": "late-light-790.webp",
-    "h": 580,
-    "kb": 16.7,
-    "w": 790
+    "file": "late-light-780.webp",
+    "h": 610,
+    "kb": 23.2,
+    "w": 780
    }
   ],
-  "w": 790
+  "w": 780
  },
  "logo-board": {
   "color": "#856b23",
@@ -153,6 +172,25 @@
    }
   ],
   "w": 1200
+ },
+ "reef-door": {
+  "color": "#998666",
+  "h": 844,
+  "variants": [
+   {
+    "file": "reef-door-480.webp",
+    "h": 600,
+    "kb": 12.7,
+    "w": 480
+   },
+   {
+    "file": "reef-door-675.webp",
+    "h": 844,
+    "kb": 21.3,
+    "w": 675
+   }
+  ],
+  "w": 675
  },
  "reef-plaque": {
   "color": "#83867f",
@@ -306,6 +344,25 @@
   ],
   "w": 1536
  },
+ "room-triple-window": {
+  "color": "#5d676d",
+  "h": 844,
+  "variants": [
+   {
+    "file": "room-triple-window-480.webp",
+    "h": 600,
+    "kb": 11.0,
+    "w": 480
+   },
+   {
+    "file": "room-triple-window-675.webp",
+    "h": 844,
+    "kb": 20.0,
+    "w": 675
+   }
+  ],
+  "w": 675
+ },
  "shop-inside": {
   "color": "#827c64",
   "h": 1500,
@@ -344,24 +401,31 @@
   ],
   "w": 1200
  },
- "view-window": {
-  "color": "#5f7187",
-  "h": 1920,
+ "street": {
+  "color": "#71849f",
+  "h": 800,
   "variants": [
    {
-    "file": "view-window-640.webp",
+    "file": "street-640.webp",
     "h": 800,
-    "kb": 24.1,
+    "kb": 41.1,
     "w": 640
-   },
-   {
-    "file": "view-window-1000.webp",
-    "h": 1250,
-    "kb": 41.4,
-    "w": 1000
    }
   ],
-  "w": 1536
+  "w": 640
+ },
+ "towel": {
+  "color": "#8b826b",
+  "h": 600,
+  "variants": [
+   {
+    "file": "towel-480.webp",
+    "h": 600,
+    "kb": 13.9,
+    "w": 480
+   }
+  ],
+  "w": 480
  },
  "wetsuits": {
   "color": "#827960",
@@ -400,5 +464,24 @@
    }
   ],
   "w": 1496
+ },
+ "window-open": {
+  "color": "#8b7e69",
+  "h": 1500,
+  "variants": [
+   {
+    "file": "window-open-640.webp",
+    "h": 800,
+    "kb": 30.8,
+    "w": 640
+   },
+   {
+    "file": "window-open-1000.webp",
+    "h": 1250,
+    "kb": 55.8,
+    "w": 1000
+   }
+  ],
+  "w": 1200
  }
 }

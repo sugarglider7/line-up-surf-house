@@ -1,6 +1,6 @@
 # BUILD STATUS — line-up-surf-house
 
-_Last updated: 2026-10-02 (phase 3 complete: all pages EN + FR, inquiry flow, QA, live check) by BuildLineUp_
+_Last updated: 2026-10-02 (phase 4 fix pass: Audit A + B findings applied, rebuilt, verified locally) by FixLineUp_
 
 ## Recovered state (resume of crashed run "agadir-batch2")
 - Prior run left ONLY raw material (no repo, no status files, no code, no deployment):
@@ -51,13 +51,14 @@ _Last updated: 2026-10-02 (phase 3 complete: all pages EN + FR, inquiry flow, QA
 ## QA status
 - Phase 2: check_site OK (2 pages); 3 screenshot rounds (qa/line-up-surf-house/p2/).
 - Phase 3: check_site OK (13 pages, 0 WARN); 2 screenshot rounds over every template at 390×844 + 1440×900, plus 360 px, menu open, 404, form filled + success EN/FR (qa/line-up-surf-house/p3/); 0 console errors, 0 failed requests on all 13 pages; no horizontal overflow at 360/390/1440; lang switch keeps page; form validation + decoded wa.me text EN/FR verified; dock never covers submit/footer; perf at 390: 166–241 KB before scroll, 6–9 requests, CLS 0. Details + claim table in QA_CHECKLIST.md.
+- Phase 4 (audits A + B, 35 findings): all fixed, none won't-fix — see QA_CHECKLIST "Fix log". Key changes: cover layout no longer breaks ≥1600 px and the H1 baseline stands on the horizon hairline at every width (measured 360 → 2560); photos re-allocated (rooms opens on a room, house 1 → 5 photos, Anza 1 → 2, the upstairs view no longer repeated in the same light, sunset chapter ends on the real low sun in natural colour); parents removed beyond "the family"; FR CTA "Demander les dispos"; aggregateRating removed from JSON-LD (orchestrator). check_site OK (13 pages); 0 console errors / broken images on 12 pages; no overflow at 360; decoded wa.me EN/FR re-checked. Screenshots: qa/line-up-surf-house/p4-fix/.
 
 ## Deployment URL
 - https://line-up-surf-house.peashoot.io/ (Cloudflare Pages project "line-up-surf-house", output dir `site/`, no build command). **Note: GitHub pushes did NOT auto-deploy in phase 3** (latest deployment stayed on 73baae3 after two pushes); deployments were triggered with `tools/cf-static-deploy.sh line-up-surf-house deploy`. Live = b962376, verified.
 
 ## Outstanding problems
-- Image gaps: no rooftop, breakfast/food, people or surf-action photos; ask owner via Fadwa. The rooftop is carried by a typographic panel; replace/add photos when supplied.
-- Hero desktop image is the 1536-px Booking upload scaled to 1396 px (slightly soft on 2× screens); a larger original from the owner would help.
+- Image gaps: no rooftop, breakfast/food, people or surf-action photos; ask owner via Fadwa. The rooftop is carried by a typographic panel plus a sea-view-room evening photo (captioned as such); replace/add photos when supplied.
+- Hero desktop image is the 1536-px Booking upload (crop 1411 px, q88), upscaled above ~1400 px wide (soft on 1920+/2× screens); a full-size original from the owner would fix it.
 - Owner questions still open (SOURCE_OF_TRUTH §g): WhatsApp on 06 41 23 67 58; brothers' spellings + OK to be named; lesson formats/prices; R8 "Reef room" bathroom; roof/breakfast/family/lesson photos.
 
 ## Log
@@ -74,3 +75,4 @@ _Last updated: 2026-10-02 (phase 3 complete: all pages EN + FR, inquiry flow, QA
 - phase 3 QA round 1 → 2: house breakfast list overflow fixed; desktop mast H1 clamp; Anza band levelled + horizon re-measured; Anza mast H1/lead side by side on desktop; FR NBSP pass; "×2" + footer phone kept on one line; guest selects aligned; aria-current in nav; compact dock at <380 px; claims softened ("one staircase away", "LINE UP towels" in every room). QA_CHECKLIST, BRAND_NOTES §7, ASSET_INVENTORY phase-3 outputs written.
 - deploy: pushes to main not picked up by Cloudflare → triggered production deploys via cf-static-deploy.sh (8b2c3ec, then b962376).
 - live check (390, one tab): home, /rooms/, /book/, /fr/, /fr/la-maison/, 404 (custom page, HTTP 404, EN + FR) — first pass showed the Cloudflare Web Analytics beacon blocked by the new CSP (failed request) → CSP allows static.cloudflareinsights.com / cloudflareinsights.com; second pass: 0 failed requests, 0 console errors, 0 broken images, canonicals correct; live home 185 KB / 10 requests at 390. Tab closed, preview stopped.
+- phase 4 (FixLineUp): applied Audit A (A1–A21) + Audit B (B1–B14) via content/templates/images/CSS/JS + rebuild; aggregateRating dropped from JSON-LD; QA_CHECKLIST Fix log, BRAND_NOTES §2/§5/§7/§8, ASSET_INVENTORY phase-4 table, SoT parents rule updated; verified at 360/390/1440/1600/1920/2560 in one tab.

@@ -160,7 +160,8 @@ Old figures 9.5/78 (S7 mirrors) = [STALE]. Publish as "9.6 on Booking.com" / "St
 | **The parents ("Mum and Dad")** — unnamed | ≈10: Simon UK ("Mum and Dad prepare the breakfasts"), Mimi, Gadea, Monika ("pani domu"), Agnieszka ("mama-made"), Gloria ("padre, madre y hijos"), Mireia ("los padres se dedican a la logística y cocina"), Branimira ("the mom's attention to detail"), Junior, Youness; Google: Katharina Fluck, maria andres del valle | The mother cooks breakfast (and on-request meals); father helps with breakfast/logistics. | Their names. One Google review (alaouri youness – same family group as Booking "Youness") calls the owner "Rachid" → single source, [UNVERIFIED]; never publish "Rachid" or "owner". |
 | **Ali / Alí** | 1 independent (Mireia, ES: "un instructor majísimo Alí") + "anza agadir" Google account ("2 surf instructors Ali and zohair") | — | Not established; do not publish. |
 
-Safe phrasing (brand voice): "Line Up is our family's house: Mum's breakfasts, and two brothers — Saïd and Zohair — between the shop, the house and the water." OK to name both brothers (first-party mentions of both). Do not assign titles. Teaching: "often Zohair in the water with beginners" (PROBABLE, 3 independent + generic "one of the brothers" ×4).
+Safe phrasing (brand voice): "Line Up is run by our family: two brothers, Saïd and Zohair, between the shop, the house and the water, and the whole family behind breakfast." OK to name both brothers (first-party mentions of both). Do not assign titles. Teaching: "often Zohair in the water with beginners" (PROBABLE, 3 independent + generic "one of the brothers" ×4).
+**Phase 4 rule (Audit A1/A2):** nothing about the parents beyond "the family" — no "Mum's breakfasts", no "our parents in the kitchen", and no guest quote that gives them roles (quote #10 is not published) until owner question §g-2 is answered.
 
 ## (f) Quotable reviews (exact text, attribution as platform shows)
 
