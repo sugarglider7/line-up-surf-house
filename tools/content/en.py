@@ -337,7 +337,7 @@ ROOMS = {
         "label": "Every room",
         "title": "What every room has. And what we don’t do.",
         "has_title": "In every room",
-        "has": ["A private room — no dorms, no bunk beds", "LINE UP towels", "A shower, in the room or just outside it",
+        "has": ["A private room — no dorms, no bunk beds", "Towels", "A shower, in the room or just outside it",
                 "Free Wi-Fi", "Non-smoking", "Breakfast included"],
         "not_title": "Not here",
         "not": ["Cribs or extra beds", "Pets", "Parties"],
@@ -359,7 +359,7 @@ SURF = {
     "mast": {
         "t": .25, "tone": "sky", "hour": "First session", "kicker": "The surf school",
         "h1": "The surf school is downstairs.",
-        "lead": "Line Up is a house with its own surf school and shop on the ground floor. Lessons, boards and wetsuits are one staircase away, and the beach is just across the car park.",
+        "lead": "Line Up is a house with its own surf school and shop on the ground floor. Lessons, boards and wetsuits are right here in the house, and the beach is just across the car park.",
         "img": "shop-inside",
         "img_alt": "Inside the Line Up shop: racks of yellow soft-top surfboards, a blue plastic chair and a wooden floor",
         "caption": "Inside our shop",

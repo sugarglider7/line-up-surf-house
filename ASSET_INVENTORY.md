@@ -131,3 +131,16 @@ Alternates: `gm-owner-04.jpg` (shop interior), `bk-14` (evening window), `bk-55`
 - No night/blue-hour exterior, no common areas (lounge, dining room), no logo file (logo only visible on a board: gm-owner-07 and on mural/towels).
 - Quality: Booking photos are wide-angle phone shots with strong LED colour casts (red/blue/yellow ceilings) — prefer neutral-white ones; treat with crop/grade, avoid showing toilets.
 - Recommendation: ask the owner (via Fadwa) for rooftop, breakfast, family and lesson photos/videos (they likely exist on phones / WhatsApp). Until then design around: typographic "day" sections, horizon-line graphics, window-framed views, shop/board imagery. Any Anza-beach context imagery must be clearly place-only (CONTEXT) and never shown as the business.
+
+## Phase 3 outputs (tools/images.py → site/assets/img/)
+| output | source | placement |
+|---|---|---|
+| `view-window-640/1000` | bk-32 (hires) | Rooms masthead |
+| `room-seaview-dbl-480/675` | bk-13 | Rooms — sea view set (double) |
+| `room-triple-3-480/800` | bk-29 (hires) | Rooms — triple set |
+| `room-private-twin-480/675` | bk-06 | Rooms — private bathroom set (twin) |
+| `reef-plaque-480/800` | bk-26 (hires) | Rooms — compact set ("Reef room" door) |
+| `mural-640/1000` | gm-owner-06 | The house masthead |
+| `shop-inside-640/1000` | gm-owner-04 | Surf masthead |
+| `anza-view-800/1200/1290` | bk-45 (hires), levelled −2.69°, horizon 0.45 | Anza band with the line-up hairline |
+Reused: `room-seaview`, `room-triple`, `room-private`, `room-compact` (rooms sets), `window` (surf "the water"), `logo-board`, `boards`, `wetsuits` (surf rental set). No third-party imagery anywhere → no credits page needed (all photos are the property's own Booking.com uploads or Google owner photos).

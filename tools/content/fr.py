@@ -334,7 +334,7 @@ ROOMS = {
         "label": "Toutes les chambres",
         "title": "Ce qu’il y a dans chaque chambre. Et ce qu’on ne fait pas.",
         "has_title": "Dans chaque chambre",
-        "has": ["Une chambre privée — pas de dortoir, pas de lits superposés", "Des serviettes LINE UP", "Une douche, dans la chambre ou juste à côté",
+        "has": ["Une chambre privée — pas de dortoir, pas de lits superposés", "Des serviettes", "Une douche, dans la chambre ou juste à côté",
                 "Wi-Fi gratuit", "Non-fumeur", "Petit-déjeuner inclus"],
         "not_title": "Pas chez nous",
         "not": ["Lits bébé ou lits d’appoint", "Animaux", "Fêtes"],
@@ -356,7 +356,7 @@ SURF = {
     "mast": {
         "t": .25, "tone": "sky", "hour": "Première session", "kicker": "L’école de surf",
         "h1": "L’école de surf est en bas.",
-        "lead": "Line Up, c’est une maison avec sa propre école de surf et son shop au rez-de-chaussée. Les cours, les planches et les combis sont à un escalier de votre chambre, et la plage juste de l’autre côté du parking.",
+        "lead": "Line Up, c’est une maison avec sa propre école de surf et son shop au rez-de-chaussée. Les cours, les planches et les combis sont ici, dans la maison, et la plage juste de l’autre côté du parking.",
         "img": "shop-inside",
         "img_alt": "Dans le shop Line Up : des racks de planches en mousse jaunes, une chaise en plastique bleue et un parquet",
         "caption": "Dans notre shop",

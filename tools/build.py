@@ -134,7 +134,7 @@ def head(c, key, lang, extra_ld=None):
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{a(meta['title'])}</title>
 <meta name="description" content="{a(meta['description'])}">
-{robots}<link rel="canonical" href="{url}">{alts}
+{robots}{'' if key == '404' else f'<link rel="canonical" href="{url}">'}{alts}
 <meta name="theme-color" content="#0f2533">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Line Up Surf House">
@@ -171,7 +171,8 @@ def lang_switch(c, key, lang):
 
 def header(c, key, lang):
     ui = c.UI
-    links = "".join(f'<li><a href="{href(k, lang)}">{label}</a></li>' for k, label in c.NAV)
+    cur = lambda k: ' aria-current="page"' if k == key else ""
+    links = "".join(f'<li><a href="{href(k, lang)}"{cur(k)}>{label}</a></li>' for k, label in c.NAV)
     home = href("home", lang)
     return f"""<a class="skip" href="#main">{ui['skip']}</a>
 <header class="hd" data-header>
@@ -191,7 +192,7 @@ def sheet(c, key, lang):
     ui = c.UI
     items = [(k, label) for k, label in c.NAV] + [("book", ui["cta_ask"])]
     links = "".join(
-        f'<li><a href="{href(k, lang)}" data-close><span class="sheet__n">0{i + 1}</span>{label}</a></li>'
+        f'<li><a href="{href(k, lang)}"{" aria-current=page" if k == key else ""} data-close><span class="sheet__n">0{i + 1}</span>{label}</a></li>'
         for i, (k, label) in enumerate(items)
     )
     return f"""<div class="sheet" id="sheet" hidden data-sheet>
@@ -448,7 +449,7 @@ def ask_form(c, lang):
 <p class="ask__done-t">{F['done_title']}</p>
 <p>{F['done_text']}</p>
 <p><a class="btn btn--ink" href="{WA}" rel="noopener" target="_blank" data-retry><svg class="ic"><use href="#i-wa"/></svg>{F['done_retry']}</a></p>
-<p class="ask__alts"><a href="{PHONE_TEL}">{F['done_call']}: {PHONE_INTL}</a><a href="{BOOKING}" rel="noopener" target="_blank">{F['done_booking']}</a><button type="button" class="linkbtn" data-edit>{F['done_edit']}</button></p>
+<p class="ask__alts"><a href="{PHONE_TEL}">{F['done_call']}{F['msg']['sep']}{PHONE_INTL}</a><a href="{BOOKING}" rel="noopener" target="_blank">{F['done_booking']}</a><button type="button" class="linkbtn" data-edit>{F['done_edit']}</button></p>
 </div>"""
 
 

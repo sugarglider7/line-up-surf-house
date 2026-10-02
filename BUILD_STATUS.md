@@ -25,15 +25,15 @@ _Last updated: 2026-10-02 (phase 3 in progress: all pages EN + FR built, QA runn
 ## Design
 - BRAND_NOTES.md — DONE: concept "A day on the line" (5 chapters, sun moves along a horizon rule; cover headline stands on the photo's real horizon), palette sampled from their photos, fonts Anybody + Newsreader (registered in FONTS.md, 3 self-hosted woff2, 104 KB), nav/dock/sheet, CTA + form spec, page map + per-page section plans, conversion flow EN+FR, must-not-look-like.
 - Tooling: `tools/images.py` (Pillow, sequential, declarative SPEC → site/assets/img/*.webp + tools/img_manifest.json with sizes, dominant colour, detected horizon; favicons), `tools/build.py` (stdlib; content in `tools/content/en.py`, FR = parallel `fr.py` with the same keys; links to unbuilt pages fall back to homepage anchors; writes sitemap/robots/_headers/404).
-- Design system: `site/assets/css/site.css` (27.7 KB), `site/assets/js/site.js` (7.5 KB, deferred), favicon.svg + favicon-32.png + apple-touch-icon.png.
+- Design system: `site/assets/css/site.css` (40 KB, 9 KB gzip), `site/assets/js/site.js` (8.6 KB, deferred), favicon.svg + favicon-32.png + apple-touch-icon.png. Phase 3 added the inner-page system (day-strip masthead, chapter markers per page, ask band, "The day goes on" band, Anza cross-section) — see BRAND_NOTES §7.
 
 ## Pages implemented
 - EN: `/` · `/rooms/` · `/surf/` · `/house/` · `/anza/` · `/book/`
 - FR: `/fr/` · `/fr/chambres/` · `/fr/surf/` · `/fr/la-maison/` · `/fr/anza/` · `/fr/reserver/`
 - `/404.html` (EN + FR text) · sitemap.xml (hreflang pairs) · robots.txt · _headers (cache + security headers)
 
-## Pages remaining (phase 3)
-- none — QA rounds, performance numbers, QA_CHECKLIST and live check in progress
+## Pages remaining
+- none
 
 ## Factual uncertainties
 - WhatsApp: only phone found is 06 41 23 67 58 (+212 6 41 23 67 58) on the Google listing. ORCHESTRATOR DECISION (phase 2): use it for tel: AND wa.me/212641236758. **Open item: confirm with the owner that this number is on WhatsApp.**
@@ -49,14 +49,16 @@ _Last updated: 2026-10-02 (phase 3 in progress: all pages EN + FR built, QA runn
 - Name collision: "THE LINE UP surf house & hostel" in Mirleft (Airbnb) is a different business.
 
 ## QA status
-- Phase 2: check_site OK (2 pages, 0 WARN); 3 screenshot rounds at 390×844 and 1440×900 (qa/line-up-surf-house/p2/); 360 px: no horizontal overflow; 0 console errors, 0 failed requests; mobile first load ≈223 KB (HTML 28 + CSS 28 + JS 7 + fonts 104 + hero 31 + 1 lazy image); menu sheet (aria-expanded, Esc, focus return, link tap closes) and ask form (empty / order errors, composed wa.me text decoded, success panel + retry link) verified in the browser. 404.html NOT yet visually checked (python http.server doesn't serve custom 404s) — check on the Cloudflare preview in phase 3.
+- Phase 2: check_site OK (2 pages); 3 screenshot rounds (qa/line-up-surf-house/p2/).
+- Phase 3: check_site OK (13 pages, 0 WARN); 2 screenshot rounds over every template at 390×844 + 1440×900, plus 360 px, menu open, 404, form filled + success EN/FR (qa/line-up-surf-house/p3/); 0 console errors, 0 failed requests on all 13 pages; no horizontal overflow at 360/390/1440; lang switch keeps page; form validation + decoded wa.me text EN/FR verified; dock never covers submit/footer; perf at 390: 166–241 KB before scroll, 6–9 requests, CLS 0. Details + claim table in QA_CHECKLIST.md.
 
 ## Deployment URL
-- target: https://line-up-surf-house.peashoot.io/ (Cloudflare Pages project "line-up-surf-house", output dir `site/`, no build command) — not yet created
+- https://line-up-surf-house.peashoot.io/ (Cloudflare Pages project "line-up-surf-house", output dir `site/`, no build command, auto-deploys on push to main) — live check: see Log.
 
 ## Outstanding problems
 - Image gaps: no rooftop, breakfast/food, people or surf-action photos; ask owner via Fadwa. The rooftop is carried by a typographic panel; replace/add photos when supplied.
 - Hero desktop image is the 1536-px Booking upload scaled to 1396 px (slightly soft on 2× screens); a larger original from the owner would help.
+- Owner questions still open (SOURCE_OF_TRUTH §g): WhatsApp on 06 41 23 67 58; brothers' spellings + OK to be named; lesson formats/prices; R8 "Reef room" bathroom; roof/breakfast/family/lesson photos.
 
 ## Log
 - 05:08 recovery: workspace created from prior raw research; brief + standard written.
@@ -69,3 +71,4 @@ _Last updated: 2026-10-02 (phase 3 in progress: all pages EN + FR built, QA runn
 - round 2 (390 + 1440): mobile H1 too timid (2 small lines, empty sky) → 12.3vw / 110 % width, 3 lines standing on the horizon; "Ask for dates" wrapped beside the Booking button → single full-width primary + "9.6 on Booking.com · Book there" link line; spec labels column too wide on mobile → 6em.
 - round 3 (390 + 1440 + 360): fold verified on both; ch1 window photo now sticky on desktop; breakfast items no longer break mid-item; en-GB date format in the WhatsApp text; nav sheet + form + success state screenshots saved; tab closed, preview stopped.
 - phase 3: inner pages built from the page map (rooms, surf, house, anza, book) + full FR mirror (`tools/content/fr.py`, same keys, French review quotes from the captured corpus); masthead "day strip" (five hours on one horizon, sun at the page's hour), time-of-day markers inside pages, "The day goes on" band linking pages in day order; 8 new image outputs (Anza band levelled −2.69° so the line-up hairline sits on the real horizon); book form prefill (`?room=`, `?extra=`), robust date parsing, FR spacing (NBSP before : ; ! ? »).
+- phase 3 QA round 1 → 2: house breakfast list overflow fixed; desktop mast H1 clamp; Anza band levelled + horizon re-measured; Anza mast H1/lead side by side on desktop; FR NBSP pass; "×2" + footer phone kept on one line; guest selects aligned; aria-current in nav; compact dock at <380 px; claims softened ("one staircase away", "LINE UP towels" in every room). QA_CHECKLIST, BRAND_NOTES §7, ASSET_INVENTORY phase-3 outputs written.

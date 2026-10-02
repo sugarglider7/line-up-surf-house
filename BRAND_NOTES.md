@@ -53,14 +53,21 @@ Registered in `/home/agent/agadir-pilot/FONTS.md` (no overlap). Self-hosted woff
 ## 7. Page map (EN root + FR mirror)
 | page | EN | FR | status |
 |---|---|---|---|
-| Home | `/` | `/fr/` | EN built (phase 2) · FR phase 3 |
-| Rooms | `/rooms/` | `/fr/chambres/` | phase 3 |
-| Surf school & shop | `/surf/` | `/fr/surf/` | phase 3 |
-| The house (family, breakfast, home cooking, rooftop, reviews) | `/house/` | `/fr/la-maison/` | phase 3 |
-| Anza (place, practical bit, day trips) | `/anza/` | `/fr/anza/` | phase 3 |
-| Ask for dates (full form) | `/book/` | `/fr/reserver/` | phase 3 |
-| 404 | `/404.html` | — | built |
-Rooftop and Reviews are folded into The house (no rooftop photos; reviews work better beside the family story). Until a page exists, `build.py` points its links at the matching homepage chapter (`#rooms`, `#surf`, `#family`, `#anza`, `#ask`).
+| Home | `/` | `/fr/` | built (EN phase 2, FR phase 3) |
+| Rooms | `/rooms/` | `/fr/chambres/` | built (phase 3) — hour: Midday |
+| Surf school & shop | `/surf/` | `/fr/surf/` | built (phase 3) — hour: First session |
+| The house (family, breakfast, home cooking, rooftop, reviews) | `/house/` | `/fr/la-maison/` | built (phase 3) — hour: First light → Sunset |
+| Anza (place, practical bit, day trips) | `/anza/` | `/fr/anza/` | built (phase 3) — hour: Afternoon |
+| Ask for dates (full form) | `/book/` | `/fr/reserver/` | built (phase 3) — hour: Sunset |
+| 404 | `/404.html` | (FR text on the same page) | built |
+Rooftop and Reviews are folded into The house (no rooftop photos; reviews work better beside the family story).
+
+### Inner-page system (phase 3) — the day continues, without repeating the homepage
+- **Masthead = the day strip.** One horizon rule with five ticks (First light · First session · Midday · Second session · Sunset); the sun sits at the page's hour and rises into place on load. Background = that hour's flat colour (house dawn, surf sky, rooms noon white, Anza sand, book night ink). Then kicker "hour · page", H1, lead, one real photo (4:3 mobile / 4:5 desktop). Anza uses a full-width band instead, with "the line-up" hairline drawn on the photo's real horizon (image levelled in `images.py`).
+- **Inside pages** sections open on the same chapter markers, with the sun moving through the page's own hours (the house page runs First light → All day → Evening → Sunset; rooms run 01–04 through midday).
+- **"The day goes on"** band before the footer links pages in the order of the day: house → surf → rooms → Anza → ask for dates.
+- **Anza cross-section**: house → car park → sand → white water → the line-up, drawn flat in CSS (order of things, never distances).
+- Every inner page closes with a yellow ask band (prefills `/book/?room=` / `?extra=`); `/book/` is the only full form besides the homepage chapter.
 
 ### Section plans
 **Home (built)**
