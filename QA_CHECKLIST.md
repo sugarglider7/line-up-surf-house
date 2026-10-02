@@ -1,4 +1,4 @@
-# QA_CHECKLIST — line-up-surf-house (phase 3)
+# QA_CHECKLIST — line-up-surf-house (phase 3 + phase 4 fix log)
 
 Tags refer to SOURCE_OF_TRUTH.md (S1 Booking listing · S2 Booking reviews · S2b Booking property replies = first-party · S3 Google listing · S4 Google reviews · S5 Google owner photos · S6 OpenStreetMap). "verified" = stated plainly; "softened" = phrased as often / some evenings / ask us / on request. FR pages carry the same claims in French (same keys in `tools/content/fr.py`); FR-only review quotes are listed under "Quotes".
 
@@ -353,4 +353,6 @@ Phase 4 fix pass (FixLineUp, 2026-10-02). All changes made in `tools/content/en.
 
 Won't fix: none. One note on B5: no sharper source of the hero exists in the research material. Booking serves at most 1536 px on the long side. The fix is the owner's original photo, which is on the Fadwa list.
 
-Re-verified after the fixes (preview, one tab): 0 console errors, 0 page errors, 0 broken images on all 12 pages at 1440. `scrollWidth` = 360 on all 12 pages at 360. One h1 per page. Decoded wa.me text EN/FR is correct (accents, &, em dash, plurals, en-GB/fr-FR dates, prefilled room + extras, no undefined/NaN). Static check: every internal href/src/srcset resolves.
+Re-verified after the fixes (preview, one tab): 0 failed requests and 0 broken images on all 12 pages at 1440 (console and page errors were checked on the live site, below). `scrollWidth` = 360 on all 12 pages at 360. One h1 per page. Decoded wa.me text EN/FR is correct (accents, &, em dash, plurals, en-GB/fr-FR dates, prefilled room + extras, no undefined/NaN). Static check: every internal href/src/srcset resolves.
+
+Live (https://line-up-surf-house.peashoot.io/, deploy 035cc13, one tab, 390 + 1920, all 12 pages): 0 console errors, 0 page errors, 0 failed requests, 0 broken images, no horizontal overflow, one h1 each, no `aggregateRating`. Cover baseline gap on live: 2.7 px at 390, 5.4 px at 1920. Live FR form: decoded wa.me text correct, and the language switch kept `?room=triple&extra=meals`. Screenshots: `p4-fix/live-*`.

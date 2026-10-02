@@ -1,6 +1,6 @@
 # BUILD STATUS — line-up-surf-house
 
-_Last updated: 2026-10-02 (phase 4 fix pass: Audit A + B findings applied, rebuilt, verified locally) by FixLineUp_
+_Last updated: 2026-10-02 (phase 4 fix pass: Audit A + B findings applied, deployed, live-verified) by FixLineUp_
 
 ## Recovered state (resume of crashed run "agadir-batch2")
 - Prior run left ONLY raw material (no repo, no status files, no code, no deployment):
@@ -54,7 +54,7 @@ _Last updated: 2026-10-02 (phase 4 fix pass: Audit A + B findings applied, rebui
 - Phase 4 (audits A + B, 35 findings): all fixed, none won't-fix — see QA_CHECKLIST "Fix log". Key changes: cover layout no longer breaks ≥1600 px and the H1 baseline stands on the horizon hairline at every width (measured 360 → 2560); photos re-allocated (rooms opens on a room, house 1 → 5 photos, Anza 1 → 2, the upstairs view no longer repeated in the same light, sunset chapter ends on the real low sun in natural colour); parents removed beyond "the family"; FR CTA "Demander les dispos"; aggregateRating removed from JSON-LD (orchestrator). check_site OK (13 pages); 0 console errors / broken images on 12 pages; no overflow at 360; decoded wa.me EN/FR re-checked. Screenshots: qa/line-up-surf-house/p4-fix/.
 
 ## Deployment URL
-- https://line-up-surf-house.peashoot.io/ (Cloudflare Pages project "line-up-surf-house", output dir `site/`, no build command). **Note: GitHub pushes did NOT auto-deploy in phase 3** (latest deployment stayed on 73baae3 after two pushes); deployments were triggered with `tools/cf-static-deploy.sh line-up-surf-house deploy`. Live = b962376, verified.
+- https://line-up-surf-house.peashoot.io/ (Cloudflare Pages project "line-up-surf-house", output dir `site/`, no build command). **Note: GitHub pushes did NOT auto-deploy in phase 3** (latest deployment stayed on 73baae3 after two pushes); deployments are triggered with `tools/cf-static-deploy.sh line-up-surf-house deploy`. Phase 4: site deployed at 035cc13 and live-verified; the docs-only follow-up commit was deployed too, so live = HEAD of main.
 
 ## Outstanding problems
 - Image gaps: no rooftop, breakfast/food, people or surf-action photos; ask owner via Fadwa. The rooftop is carried by a typographic panel plus a sea-view-room evening photo (captioned as such); replace/add photos when supplied.
@@ -76,3 +76,4 @@ _Last updated: 2026-10-02 (phase 4 fix pass: Audit A + B findings applied, rebui
 - deploy: pushes to main not picked up by Cloudflare → triggered production deploys via cf-static-deploy.sh (8b2c3ec, then b962376).
 - live check (390, one tab): home, /rooms/, /book/, /fr/, /fr/la-maison/, 404 (custom page, HTTP 404, EN + FR) — first pass showed the Cloudflare Web Analytics beacon blocked by the new CSP (failed request) → CSP allows static.cloudflareinsights.com / cloudflareinsights.com; second pass: 0 failed requests, 0 console errors, 0 broken images, canonicals correct; live home 185 KB / 10 requests at 390. Tab closed, preview stopped.
 - phase 4 (FixLineUp): applied Audit A (A1–A21) + Audit B (B1–B14) via content/templates/images/CSS/JS + rebuild; aggregateRating dropped from JSON-LD; QA_CHECKLIST Fix log, BRAND_NOTES §2/§5/§7/§8, ASSET_INVENTORY phase-4 table, SoT parents rule updated; verified at 360/390/1440/1600/1920/2560 in one tab.
+- phase 4 deploy + live check (one tab, 390 + 1920, all 12 pages): 0 console errors, 0 page errors, 0 failed requests, 0 broken images, no overflow, one h1 each, no aggregateRating; live cover baseline gap 2.7 px (390) / 5.4 px (1920); live FR form → decoded wa.me text correct, language switch keeps ?room/&extra. Screenshots `p4-fix/live-*`. Tab closed, preview stopped.
