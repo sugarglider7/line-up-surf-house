@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://line-up-surf-house.peashoot.io/sitemap.xml
