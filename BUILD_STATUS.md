@@ -7,6 +7,13 @@ _Last updated: 2026-10-02 (phase 2 design + EN homepage complete) by DesignLineU
   raw page dumps + downloaded images, now in `research/raw/` (gitignored; on disk at /home/agent/agadir-pilot/sites/line-up-surf-house/research/raw/). Original copy still at /tmp/sites2/line-up-surf-house/.
 - Confirmed on 2026-10-02: no GitHub repo, no Cloudflare Pages project, no live line-up-surf-house.peashoot.io before this run.
 
+## Orchestrator review (phase 2 → phase 3, binding)
+- Homepage proof approved: "A day on the line", Anybody + Newsreader, horizon rules with the sun's position, yellow board-colour CTA. Keep it.
+- Keep claims about Saïd/Zohair exactly as soft as now (guest-experience phrasing, no titles). "Zohair is often the one in the water with you" and "Saïd is usually the one sorting out taxis, trips and tips" are the ceiling — do not go further.
+- Phase 3: build the dedicated pages from the page map (rooms/stay, surf school & shop, the house incl. roof + food + family, Anza, ask for dates) + full FR mirror; homepage sections stay as chapters linking to them, not duplicates.
+- 404 must be checked on the live site (local http.server doesn't serve it).
+- Live: https://line-up-surf-house.peashoot.io/ (Cloudflare Pages project line-up-surf-house, output dir site/, auto-deploys on push to main).
+
 ## Research
 - SOURCE_OF_TRUTH.md — DONE (S1–S9; contact block; facts by topic; ratings; people; 12 quotes; owner questions)
 - CONTENT_INVENTORY.md — DONE (per page/section, ✓/~/✗ markers)
